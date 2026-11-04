@@ -92,10 +92,14 @@ scl_redcap <- function (xy,
 
         xy <- scl_tbl (xy)
 
+        # The spatial structure (neighbours and spanning trees) is always built
+        # from the nearest spatial neighbours. `shortest` only determines
+        # whether lower or higher values of `dmat` are preferentially merged
+        # when cutting the tree.
         if (nnbs <= 0) {
-            edges_nn <- scl_edges_tri (xy, shortest = shortest)
+            edges_nn <- scl_edges_tri (xy)
         } else {
-            edges_nn <- scl_edges_nn (xy, nnbs = nnbs, shortest = shortest)
+            edges_nn <- scl_edges_nn (xy, nnbs = nnbs)
         }
 
         if (!full_order) {
@@ -106,19 +110,19 @@ scl_redcap <- function (xy,
 
             if (linkage == "average") {
 
-                tree_full <- scl_spantree_alk (edges_nn, shortest)
+                tree_full <- scl_spantree_alk (edges_nn, shortest = TRUE)
 
             } else {
 
                 d_xy <- as.matrix (stats::dist (xy))
-                edges_all <- scl_edges_all (xy, d_xy, shortest)
+                edges_all <- scl_edges_all (xy, d_xy, shortest = TRUE)
 
                 if (linkage == "single") {
 
                     tree_full <- scl_spantree_slk (
                         edges_all,
                         edges_nn,
-                        shortest = shortest,
+                        shortest = TRUE,
                         quiet = quiet
                     )
 
@@ -127,7 +131,7 @@ scl_redcap <- function (xy,
                     tree_full <- scl_spantree_clk (
                         edges_all,
                         edges_nn,
-                        shortest = shortest,
+                        shortest = TRUE,
                         quiet = quiet
                     )
 

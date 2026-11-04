@@ -60,3 +60,26 @@ test_that ("recluster", {
     expect_identical (scl2, scl3)
     expect_true (!identical (scl, scl2))
 })
+
+test_that ("shortest = FALSE uses spatially nearest neighbours", {
+    set.seed (1)
+    n <- 100
+    xy <- matrix (runif (2 * n), ncol = 2)
+    dmat <- matrix (runif (n^2), ncol = n)
+
+    # Neighbour edges are spatial, and independent of `dmat` or `shortest`:
+    e <- scl_edges_nn (scl_tbl (xy), nnbs = 6L)
+    dxy <- as.matrix (stats::dist (xy))
+    expect_false (is.unsorted (e$d))
+    expect_true (median (e$d) < median (dxy [upper.tri (dxy)]))
+
+    for (linkage in c ("single", "average", "complete")) {
+        scl <- scl_redcap (xy, dmat,
+            ncl = 4, linkage = linkage,
+            shortest = FALSE, quiet = TRUE
+        )
+        expect_is (scl, "scl")
+        cl <- scl$nodes$cluster [!is.na (scl$nodes$cluster)]
+        expect_true (length (unique (cl)) >= 4L, info = linkage)
+    }
+})

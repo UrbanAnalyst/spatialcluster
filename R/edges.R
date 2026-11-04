@@ -1,6 +1,9 @@
 #' scl_edges_tri
 #'
-#' Generate triangulated nearest-neighbour edges between a set of input points
+#' Generate triangulated nearest-neighbour edges between a set of input points.
+#' Edges are always defined by, and sorted in ascending order of, **spatial**
+#' distances; the user-specified \code{shortest} parameter applies only to the
+#' subsequent clustering of \code{dmat} values.
 #'
 #' @inheritParams scl_redcap
 #' @examples
@@ -9,7 +12,7 @@
 #' xy <- matrix (runif (2 * n), ncol = 2)
 #' edges <- scl_edges_tri (xy)
 #' @noRd
-scl_edges_tri <- function (xy, shortest = TRUE) {
+scl_edges_tri <- function (xy) {
 
     if (!inherits (xy, "data.frame")) {
         xy <- as.data.frame (xy)
@@ -35,7 +38,7 @@ scl_edges_tri <- function (xy, shortest = TRUE) {
 
     dxy <- as.matrix (stats::dist (xy))
 
-    append_dist_to_edges (edges, dxy, shortest)
+    append_dist_to_edges (edges, dxy, shortest = TRUE)
 }
 
 #' scl_edges_nn
@@ -43,9 +46,11 @@ scl_edges_tri <- function (xy, shortest = TRUE) {
 #' Generate distance-based nearest-neighbour edges between a set of input
 #' points, ensuring that all edges connect to a single component. The minimal
 #' spanning tree is constructed from **spatial** distances, not from distances
-#' given in `dmat`.
+#' given in `dmat`. Neighbours are always the spatially nearest ones; the
+#' \code{shortest} parameter of the clustering functions applies only to
+#' \code{dmat} values, and has no influence here.
 #' @param nnbs Number of nearest neighbours
-#' @inheritParams scl_redcap
+#' @param xy Rectangular structure containing coordinates of points.
 #'
 #' @return A `tibble` of `from` and `to` vertex indices for the minimal spanning
 #' tree edges, along with corresponding spatial distances calculated from 'xy'.
@@ -56,7 +61,7 @@ scl_edges_tri <- function (xy, shortest = TRUE) {
 #' xy <- matrix (runif (2 * n), ncol = 2)
 #' scl_edges_nn (xy, nnbs = 3L)
 #' @noRd
-scl_edges_nn <- function (xy, nnbs, shortest = TRUE) {
+scl_edges_nn <- function (xy, nnbs) {
 
     # Initially contruct with nnbs + 1, because the `d` matrix includes
     # self-distances of zero, which are subsequently removed.
@@ -64,7 +69,7 @@ scl_edges_nn <- function (xy, nnbs, shortest = TRUE) {
     d <- apply (
         as.matrix (stats::dist (xy)),
         2,
-        function (i) order (i, decreasing = !shortest) [seq_len (nnbs)]
+        function (i) order (i) [seq_len (nnbs)]
     )
 
     edges <- tibble::tibble (
@@ -101,7 +106,7 @@ scl_edges_nn <- function (xy, nnbs, shortest = TRUE) {
     edges <- edges [which (!duplicated (edges)), ]
 
     # Then append final distances from `dxy` to the return value:
-    edges <- append_dist_to_edges (edges, dxy, shortest)
+    edges <- append_dist_to_edges (edges, dxy, shortest = TRUE)
 
     return (edges)
 }

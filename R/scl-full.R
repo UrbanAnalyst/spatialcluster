@@ -36,9 +36,9 @@ scl_full <- function (xy,
         # the nearest spatial neighbours. `shortest` only determines whether
         # the distances in `dmat` are minimised or maximised when merging.
         if (nnbs <= 0) {
-            edges <- scl_edges_tri (xy, shortest = TRUE)
+            edges <- scl_edges_tri (xy)
         } else {
-            edges <- scl_edges_nn (xy, nnbs = nnbs, shortest = TRUE)
+            edges <- scl_edges_nn (xy, nnbs = nnbs)
         }
 
         # cluster numbers can be joined with edges through either from or to:
