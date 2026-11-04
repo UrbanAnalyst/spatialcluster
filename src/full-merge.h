@@ -24,6 +24,7 @@ struct OneMerge {
 
 struct FullMergeDat {
     bool shortest;
+    bool complete = false; // complete (maximal) linkage
     std::unordered_map <int, int> cl_remap;
     std::unordered_map <int, intset_t> cl_members;
     std::unordered_map <int, OneCluster> clusters;

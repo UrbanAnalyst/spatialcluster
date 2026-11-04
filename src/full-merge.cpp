@@ -44,6 +44,11 @@ void full_merge::init (const Rcpp::DataFrame &gr,
         }
     }
 
+    // Edges between the same pair of clusters are reduced to a single one.
+    // Single linkage keeps the best (shortest, or largest if !shortest)
+    // connection; complete linkage keeps the worst.
+    const bool keep_small = (cldat.shortest != cldat.complete);
+
     cldat.edges.resize (edge_dist_map.size ());
     edge_dist_map.clear ();
     size_t edge_count = 0;
@@ -66,13 +71,13 @@ void full_merge::init (const Rcpp::DataFrame &gr,
                 cldat.edges [edge_count++] = edgei;
             } else if (edge_dist_map.find (etf) != edge_dist_map.end ())
             {
-                if ((cldat.shortest && d [i] < edge_dist_map.at (etf)) ||
-                        (!cldat.shortest && d [i] > edge_dist_map.at (etf)))
+                if ((keep_small && d [i] < edge_dist_map.at (etf)) ||
+                        (!keep_small && d [i] > edge_dist_map.at (etf)))
                     edge_dist_map [etf] = d [i];
             } else
             {
-                if ((cldat.shortest && d [i] < edge_dist_map.at (eft)) ||
-                        (!cldat.shortest && d [i] > edge_dist_map.at (eft)))
+                if ((keep_small && d [i] < edge_dist_map.at (eft)) ||
+                        (!keep_small && d [i] > edge_dist_map.at (eft)))
                     edge_dist_map [eft] = d [i];
             }
         }
@@ -81,8 +86,8 @@ void full_merge::init (const Rcpp::DataFrame &gr,
     for (auto &ei: cldat.edges) {
         std::string eft = std::to_string (ei.from) + "-" +
                           std::to_string (ei.to);
-        if ((cldat.shortest && edge_dist_map.at (eft) < ei.dist) ||
-                (!cldat.shortest && edge_dist_map.at (eft) > ei.dist))
+        if ((keep_small && edge_dist_map.at (eft) < ei.dist) ||
+                (!keep_small && edge_dist_map.at (eft) > ei.dist))
             ei.dist = edge_dist_map.at (eft);
     }
 
@@ -468,6 +473,8 @@ Rcpp::NumericMatrix rcpp_full_merge (
 {
     full_merge::FullMergeDat clmerge_dat;
     clmerge_dat.shortest = shortest;
+    clmerge_dat.complete = utils::strfound (linkage, "max") ||
+        utils::strfound (linkage, "complete");
     full_merge::init (gr, clmerge_dat);
 
     if (utils::strfound (linkage, "single")) {
