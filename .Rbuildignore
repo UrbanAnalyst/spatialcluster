@@ -1,7 +1,7 @@
 ^.*\.Rproj$
 ^.*\.pdf$
 ^README-.*\.png$
-^README\.Rmd$
+^README-src\.Rmd$
 ^README\.html$
 ^\.Rproj\.user$
 ^\.git$
