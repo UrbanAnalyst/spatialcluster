@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">spatialcluster</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0.019</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0.029</span>
       </span>
     </div>
 
@@ -79,22 +79,39 @@ value.</p></dd>
 
 
 <dt id="arg-linkage">linkage<a class="anchor" aria-label="anchor" href="#arg-linkage"></a></dt>
-<dd><p>Either <code>"single"</code> or <code>"average"</code>. For covariance
-clustering, use <code>"single"</code> with `shortest = FALSE`.</p></dd>
+<dd><p>One of <code>"single"</code>, <code>"average"</code>, or <code>"complete"</code>.
+For covariance clustering, use <code>shortest = FALSE</code>; <code>"complete"</code>
+linkage then uses the smallest connecting value between clusters. As for
+<a href="scl_redcap.html">scl_redcap</a>, initial clusters are always formed from spatially nearest
+neighbours; <code>shortest</code> and <code>linkage</code> determine only how these are
+then merged according to <code>dmat</code>.</p></dd>
 
 
 <dt id="arg-shortest">shortest<a class="anchor" aria-label="anchor" href="#arg-shortest"></a></dt>
 <dd><p>If <code>TRUE</code>, the <code>dmat</code> is interpreted as distances
-such that lower values are preferentially selected; if <code>FALSE</code>, then
-higher values of <code>dmat</code> are interpreted to indicate stronger
-relationships, as is the case for example with covariances.</p></dd>
+such that lower values indicate stronger relationships, and the tree is cut
+to minimise the within-cluster sum of squared deviations of <code>dmat</code>
+values. If <code>FALSE</code>, then higher values of <code>dmat</code> are interpreted
+to indicate stronger relationships, as is the case for example with
+covariances, and the tree is cut to maximise the mean <code>dmat</code> value
+within clusters. This parameter only affects how the tree is cut; it has no
+effect on construction of the spanning tree, which is always based on
+spatial distances.</p></dd>
 
 
 <dt id="arg-nnbs">nnbs<a class="anchor" aria-label="anchor" href="#arg-nnbs"></a></dt>
-<dd><p>Number of nearest neighbours to be used in calculating clustering
-trees. Triangulation will be used if <code>nnbs &lt;= 0</code>.</p></dd>
+<dd><p>Number of spatially nearest neighbours to be used in calculating
+clustering trees, irrespective of <code>shortest</code>. Triangulation will be
+used if <code>nnbs &lt;= 0</code>.</p></dd>
 
 </dl></div>
+    <div id="value">
+    <h2>Value</h2>
+    <p>A object of class <code>scl</code> with <code>tree</code> containing the
+clustering scheme, and <code>xy</code> the original coordinate data of the
+clustered points. An additional component, <code>tree_rest</code>, enables the tree
+to be re-cut to a different number of clusters via <a href="scl_recluster.html">scl_recluster</a>.</p>
+    </div>
     <div id="see-also">
     <h2>See also</h2>
     <div class="dont-index"><p>Other clustering_fns:

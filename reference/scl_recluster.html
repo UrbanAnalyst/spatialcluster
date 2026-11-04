@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">spatialcluster</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0.019</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0.029</span>
       </span>
     </div>
 
@@ -72,9 +72,14 @@ value.</p></dd>
 
 <dt id="arg-shortest">shortest<a class="anchor" aria-label="anchor" href="#arg-shortest"></a></dt>
 <dd><p>If <code>TRUE</code>, the <code>dmat</code> is interpreted as distances
-such that lower values are preferentially selected; if <code>FALSE</code>, then
-higher values of <code>dmat</code> are interpreted to indicate stronger
-relationships, as is the case for example with covariances.</p></dd>
+such that lower values indicate stronger relationships, and the tree is cut
+to minimise the within-cluster sum of squared deviations of <code>dmat</code>
+values. If <code>FALSE</code>, then higher values of <code>dmat</code> are interpreted
+to indicate stronger relationships, as is the case for example with
+covariances, and the tree is cut to maximise the mean <code>dmat</code> value
+within clusters. This parameter only affects how the tree is cut; it has no
+effect on construction of the spanning tree, which is always based on
+spatial distances.</p></dd>
 
 
 <dt id="arg-quiet">quiet<a class="anchor" aria-label="anchor" href="#arg-quiet"></a></dt>

@@ -18,7 +18,7 @@ Constrained Agglomerative clustering and Partitioning) routines."><!-- mathjax -
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">spatialcluster</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0.019</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0.029</span>
       </span>
     </div>
 
@@ -102,14 +102,20 @@ relationships only, otherwise build from full-order relationships (see Note).</p
 
 <dt id="arg-shortest">shortest<a class="anchor" aria-label="anchor" href="#arg-shortest"></a></dt>
 <dd><p>If <code>TRUE</code>, the <code>dmat</code> is interpreted as distances
-such that lower values are preferentially selected; if <code>FALSE</code>, then
-higher values of <code>dmat</code> are interpreted to indicate stronger
-relationships, as is the case for example with covariances.</p></dd>
+such that lower values indicate stronger relationships, and the tree is cut
+to minimise the within-cluster sum of squared deviations of <code>dmat</code>
+values. If <code>FALSE</code>, then higher values of <code>dmat</code> are interpreted
+to indicate stronger relationships, as is the case for example with
+covariances, and the tree is cut to maximise the mean <code>dmat</code> value
+within clusters. This parameter only affects how the tree is cut; it has no
+effect on construction of the spanning tree, which is always based on
+spatial distances.</p></dd>
 
 
 <dt id="arg-nnbs">nnbs<a class="anchor" aria-label="anchor" href="#arg-nnbs"></a></dt>
-<dd><p>Number of nearest neighbours to be used in calculating clustering
-trees. Triangulation will be used if <code>nnbs &lt;= 0</code>.</p></dd>
+<dd><p>Number of spatially nearest neighbours to be used in calculating
+clustering trees, irrespective of <code>shortest</code>. Triangulation will be
+used if <code>nnbs &lt;= 0</code>.</p></dd>
 
 
 <dt id="arg-iterate-ncl">iterate_ncl<a class="anchor" aria-label="anchor" href="#arg-iterate-ncl"></a></dt>
@@ -134,12 +140,24 @@ clustered points. An additional component, <code>tree_rest</code>, enables the t
 to be re-cut to a different number of clusters via <a href="scl_recluster.html">scl_recluster</a>,
 rather than calculating clusters anew.</p>
     </div>
+    <div id="details">
+    <h2>Details</h2>
+    <p>Clustering is in two stages. First, a spanning tree is constructed from the
+**spatial** relationships between points in <code>xy</code> alone, using the
+nearest spatial neighbours (see <code>nnbs</code>), and independent of both
+<code>dmat</code> and <code>shortest</code>. Second, that tree is cut into <code>ncl</code>
+clusters by evaluating the values of <code>dmat</code> along its edges.</p>
+    </div>
     <div id="note">
     <h2>Note</h2>
     <p>Please refer to the original REDCAP paper ('Regionalization with
 dynamically constrained agglomerative clustering and partitioning (REDCAP)',
 by D. Guo (2008), Int.J.Geo.Inf.Sci 22:801-823) for details of the
-<code>full_order</code> and <code>linkage</code> parameters. This paper clearly
+<code>full_order</code> and <code>linkage</code> parameters. Note that, unlike the
+original, the spanning trees constructed here (for all values of
+<code>linkage</code>) are based on spatial distances between points in <code>xy</code>,
+with <code>dmat</code> used only when cutting the trees into clusters. This paper
+clearly
 demonstrates the general inferiority of spanning trees constructed from
 first-order relationships. It is therefore strongly recommended that the
 default <code>full_order = TRUE</code> be used at all times.</p>
@@ -157,8 +175,10 @@ default <code>full_order = TRUE</code> be used at all times.</p>
 <span class="r-in"><span><span class="va">xy</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span> <span class="op">(</span><span class="fl">2</span> <span class="op">*</span> <span class="va">n</span><span class="op">)</span>, ncol <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">dmat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span> <span class="op">(</span><span class="va">n</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span>, ncol <span class="op">=</span> <span class="va">n</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">scl</span> <span class="op">&lt;-</span> <span class="fu">scl_redcap</span> <span class="op">(</span><span class="va">xy</span>, <span class="va">dmat</span>, ncl <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="co"># Those clusters will by default be constructed by connecting edges with the</span></span></span>
-<span class="r-in"><span><span class="co"># lowest (\code{shortest}) values of \code{dmat}, and will differ from</span></span></span>
+<span class="r-in"><span><span class="co"># By default, the spatial tree is cut to minimise within-cluster variation</span></span></span>
+<span class="r-in"><span><span class="co"># of (\code{shortest}) values of \code{dmat}. Setting \code{shortest = FALSE}</span></span></span>
+<span class="r-in"><span><span class="co"># instead cuts the same tree to maximise mean within-cluster values of</span></span></span>
+<span class="r-in"><span><span class="co"># \code{dmat}, as for covariances, and will generally give different clusters:</span></span></span>
 <span class="r-in"><span><span class="va">scl</span> <span class="op">&lt;-</span> <span class="fu">scl_redcap</span> <span class="op">(</span><span class="va">xy</span>, <span class="va">dmat</span>, ncl <span class="op">=</span> <span class="fl">4</span>, shortest <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># using 'full_order = FALSE' constructs clusters from first-order</span></span></span>
 <span class="r-in"><span><span class="co"># relationships only; not recommended, but possible nevertheless:</span></span></span>
