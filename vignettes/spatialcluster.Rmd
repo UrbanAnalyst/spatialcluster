@@ -590,4 +590,67 @@ clusters discerned from analyses of a covariance matrix must by definition
 reflect regions towards or away from which movement of the entire,
 spatially-structured population significantly covaries.
 
+## A formal argument
+
+The preceding intuition can be made precise by considering destinations only;
+the argument for origins is identical, with rows replacing columns. Let $F$ be
+an $n \times m$ observed flow matrix with columns $f_a \in \mathbb{R}^n$, where
+$f_{ia}$ is the flow from origin $i$ to destination $a$, and let $S$ be the
+corresponding spatial interaction model with columns $s_a$. Write
+$\mathbf{1}$ for the vector of $n$ ones, and $\bar{f}_a = \mathbf{1}^\top f_a /
+n$ for the mean flow to $a$.
+
+**A net-flow measure sees only one dimension.** Any measure of net flow beyond
+that expected, whether absolute or relative, is a function of the aggregate
+$\delta_a = \bar{f}_a - \bar{s}_a = \mathbf{1}^\top (f_a - s_a) / n$. This is
+the projection of the residual vector $f_a - s_a \in \mathbb{R}^n$ onto the
+single direction $\mathbf{1}$. Two destinations $a$ and $a^\prime$ are
+therefore indistinguishable to such a measure whenever their residuals have
+equal sums, however different the vectors themselves may be.
+
+**A covariance sees the remaining $n - 1$ dimensions.** The covariance between
+destinations is
+$$
+C_{aa^\prime} = \frac{1}{n} \sum_i (f_{ia} - \bar{f}_a)(f_{ia^\prime} -
+\bar{f}_{a^\prime}) = \frac{1}{n} \langle P f_a, P f_{a^\prime} \rangle,
+\qquad P = I - \tfrac{1}{n} \mathbf{1} \mathbf{1}^\top,
+$$
+where $P$ projects onto the orthogonal complement of $\mathbf{1}$. It thus uses
+exactly the information discarded by the net-flow measure, and is unchanged by
+adding any constant to all flows to a destination (so is independent of the
+net rate of in- or out-flow, as stated above). By the Cauchy-Schwarz
+inequality, $|C_{aa^\prime}| \le \sigma_a \sigma_{a^\prime}$, with equality
+only if $P f_a$ and $P f_{a^\prime}$ are parallel; that is, only if flows to
+$a$ and $a^\prime$ are related by an affine function *at every origin*, and not
+merely in aggregate.
+
+**Spatial contiguity does not remedy this for net flows.** Suppose the origins
+are partitioned into two sub-populations, $I_1$ and $I_2$ with $|I_1| = |I_2| =
+n/2$, and that destination $a$ attracts flow $x$ only from $I_1$, while
+neighbouring $a^\prime$ attracts the same flow $x$ only from $I_2$. A spatial
+interaction model depends only on the sizes of, and distances between, origins
+and destinations, and assigns the same flows $s_a = s_{a^\prime}$ to the two
+neighbours. Then
+$$
+\bar{f}_a = \bar{f}_{a^\prime} = x / 2, \quad \text{so} \quad
+\delta_a = \delta_{a^\prime},
+$$
+and the two destinations are identical in terms of net flow, and would be
+merged first by any of the linkage schemes above. Yet the supports of $f_a$ and
+$f_{a^\prime}$ are disjoint, so that $\sum_i f_{ia} f_{ia^\prime} = 0$ and
+$$
+C_{aa^\prime} = 0 - \bar{f}_a \bar{f}_{a^\prime} = -\frac{x^2}{4} < 0.
+$$
+Their flows are in fact maximally *anti*-correlated, so the two destinations
+could never be clustered together on the basis of positive net covariance. The
+spatial constraint determines only *which pairs may be merged*; it does not
+ensure that the merged objects share any structure beyond that measured by the
+chosen dissimilarity. For net flows, that structure is a single scalar, and
+spatially adjacent objects with equal totals but unrelated origins will be
+clustered. For covariances, a cluster of mutually positive values
+$C_{aa^\prime} > 0$ implies that, on average, the entire population varies in
+the same direction relative to its mean in its flows to every member of the
+cluster, which is precisely the interpretation of covariance clusters developed
+above.
+
 # References
