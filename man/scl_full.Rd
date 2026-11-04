@@ -40,6 +40,12 @@ spatial distances.}
 clustering trees, irrespective of \code{shortest}. Triangulation will be
 used if \code{nnbs <= 0}.}
 }
+\value{
+A object of class \code{scl} with \code{tree} containing the
+clustering scheme, and \code{xy} the original coordinate data of the
+clustered points. An additional component, \code{tree_rest}, enables the tree
+to be re-cut to a different number of clusters via \link{scl_recluster}.
+}
 \description{
 Full spatially-constrained clustering.
 }

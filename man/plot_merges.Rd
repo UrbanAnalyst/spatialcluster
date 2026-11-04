@@ -18,6 +18,13 @@ Nothing (generates plot)
 \description{
 Plot dendrogram of merges for \code{scl} object with \code{method = "full"}.
 }
+\examples{
+n <- 100
+xy <- matrix (runif (2 * n), ncol = 2)
+dmat <- matrix (runif (n^2), ncol = n)
+scl <- scl_full (xy, dmat, ncl = 4)
+plot_merges (scl)
+}
 \seealso{
 Other plot_fns:
 \code{\link[=plot.scl]{plot.scl()}}

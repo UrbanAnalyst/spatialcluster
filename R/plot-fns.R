@@ -148,6 +148,12 @@ check_hull_alpha <- function (a) {
 #' @return Nothing (generates plot)
 #' @family plot_fns
 #' @export
+#' @examples
+#' n <- 100
+#' xy <- matrix (runif (2 * n), ncol = 2)
+#' dmat <- matrix (runif (n^2), ncol = n)
+#' scl <- scl_full (xy, dmat, ncl = 4)
+#' plot_merges (scl)
 plot_merges <- function (x, root_tree = FALSE) {
     if (!(methods::is (x, "scl") && x$pars$method == "full")) {
         stop (
