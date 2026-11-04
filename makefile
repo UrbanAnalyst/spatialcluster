@@ -1,5 +1,5 @@
 RFILE = README
-VIGNETTE = flows
+VIGNETTE = spatialcluster
 
 all: help
 
