@@ -186,27 +186,27 @@ convert_merges_to_hclust <- function (x) {
     mt <- as.matrix (x$merges [, c ("from", "to")]) + 1
     dists <- as.vector (x$merges$dist)
     indx <- sort (unique (as.vector (mt)))
-    mt <- apply (mt, 2, function (i) match (i, indx))
+    mt <- apply (mt, 2, match, table = indx)
     merged <- d <- NULL
     map <- rep (NA, max (mt))
     for (i in seq_len (nrow (mt))) {
         m1 <- mt [i, 1]
         m2 <- mt [i, 2]
-        if (!m1 %in% merged) {
-            merged <- c (merged, m1)
-            mt [i, 1] <- -m1
-        } else {
+        if (m1 %in% merged) {
             mt [i, 1] <- map [m1]
             dists [i] <- dists [i] + dists [map [m1]]
+        } else {
+            merged <- c (merged, m1)
+            mt [i, 1] <- -m1
         }
         map [m1] <- i
 
-        if (!m2 %in% merged) {
-            merged <- c (merged, m2)
-            mt [i, 2] <- -m2
-        } else {
+        if (m2 %in% merged) {
             mt [i, 2] <- map [m2]
             dists [i] <- dists [i] + dists [map [m2]]
+        } else {
+            merged <- c (merged, m2)
+            mt [i, 2] <- -m2
         }
         map [m2] <- i
     }

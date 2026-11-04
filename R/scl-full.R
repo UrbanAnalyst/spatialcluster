@@ -2,12 +2,12 @@
 #'
 #' Full spatially-constrained clustering.
 #'
-#' @param linkage One of \code{"single"}, \code{"average"}, or \code{"complete"}.
-#' For covariance clustering, use \code{shortest = FALSE}; \code{"complete"}
-#' linkage then uses the smallest connecting value between clusters. As for
-#' \link{scl_redcap}, initial clusters are always formed from spatially nearest
-#' neighbours; \code{shortest} and \code{linkage} determine only how these are
-#' then merged according to \code{dmat}.
+#' @param linkage One of \code{"single"}, \code{"average"}, or
+#' \code{"complete"}. For covariance clustering, use \code{shortest = FALSE};
+#' \code{"complete"} linkage then uses the smallest connecting value between
+#' clusters. As for \link{scl_redcap}, initial clusters are always formed from
+#' spatially nearest neighbours; \code{shortest} and \code{linkage} determine
+#' only how these are then merged according to \code{dmat}.
 #' @inheritParams scl_redcap
 #'
 #' @return A object of class \code{scl} with \code{tree} containing the
@@ -29,7 +29,10 @@ scl_full <- function (xy,
                       shortest = TRUE,
                       nnbs = 6L) {
 
-    linkage <- match.arg (tolower (linkage), c ("single", "average", "complete"))
+    linkage <- match.arg (
+        tolower (linkage),
+        c ("single", "average", "complete")
+    )
 
     if (methods::is (xy, "scl")) {
         message (

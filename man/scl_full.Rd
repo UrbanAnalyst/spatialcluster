@@ -19,12 +19,12 @@ columns.}
 parameter for conditions under which actual number may be less than this
 value.}
 
-\item{linkage}{One of \code{"single"}, \code{"average"}, or \code{"complete"}.
-For covariance clustering, use \code{shortest = FALSE}; \code{"complete"}
-linkage then uses the smallest connecting value between clusters. As for
-\link{scl_redcap}, initial clusters are always formed from spatially nearest
-neighbours; \code{shortest} and \code{linkage} determine only how these are
-then merged according to \code{dmat}.}
+\item{linkage}{One of \code{"single"}, \code{"average"}, or
+\code{"complete"}. For covariance clustering, use \code{shortest = FALSE};
+\code{"complete"} linkage then uses the smallest connecting value between
+clusters. As for \link{scl_redcap}, initial clusters are always formed from
+spatially nearest neighbours; \code{shortest} and \code{linkage} determine
+only how these are then merged according to \code{dmat}.}
 
 \item{shortest}{If \code{TRUE}, the \code{dmat} is interpreted as distances
 such that lower values indicate stronger relationships, and the tree is cut
