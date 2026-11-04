@@ -5,7 +5,7 @@
 status](https://github.com/UrbanAnalyst/spatialcluster/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/UrbanAnalyst/spatialcluster/actions?query=workflow%3AR-CMD-check.yaml)
 [![Project Status:
 WIP](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
-[![codecov](https://codecov.io/gh/UrbanAnalyst/spatialcluster/branch/master/graph/badge.svg)](https://app.codecov.io/gh/UrbanAnalyst/spatialcluster)
+[![codecov](https://codecov.io/gh/UrbanAnalyst/spatialcluster/branch/main/graph/badge.svg)](https://app.codecov.io/gh/UrbanAnalyst/spatialcluster)
 
 # spatialcluster
 
