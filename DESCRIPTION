@@ -1,6 +1,6 @@
 Package: spatialcluster
 Title: R port of redcap
-Version: 0.2.1.002
+Version: 0.2.1.003
 Authors@R: 
     person("Mark", "Padgham", , "mark.padgham@email.com", role = c("aut", "cre"))
 Description: R port of redcap ('Regionalization with dynamically
@@ -13,13 +13,13 @@ Depends:
     R (>= 4.1.0)
 Imports:
     alphahull,
+    deldir,
     dplyr,
     ggplot2,
     ggthemes,
     methods,
     Rcpp (>= 0.12.6),
-    tibble,
-    tripack
+    tibble
 Suggests:
     dbscan,
     knitr,

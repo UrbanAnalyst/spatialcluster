@@ -21,15 +21,13 @@ scl_edges_tri <- function (xy) {
         xy <- dplyr::select (xy, c (x, y))
     }
     names (xy) <- c ("x", "y")
-    nbs <- tripack::tri.mesh (xy) |>
-        tripack::neighbours ()
-
-    n <- length (nbs)
-    edges <- lapply (
-        seq (n),
-        function (i) cbind (i, nbs [[i]])
+    # Delaunay triangulation via 'deldir'; each segment is returned once, so
+    # both directions are added to give a symmetric edge set.
+    del <- deldir::deldir (xy$x, xy$y, suppressMsge = TRUE)$delsgs
+    edges <- rbind (
+        cbind (del$ind1, del$ind2),
+        cbind (del$ind2, del$ind1)
     )
-    edges <- do.call (rbind, edges)
 
     edges <- tibble::tibble (
         from = edges [, 1],
