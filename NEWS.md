@@ -1,5 +1,6 @@
 # spatialcluster 0.2.0.00X (current dev version)
 
+- Allow 'dmat' to be long-form as well as square (#8)
 - Finish main vignette
 - Fix `shortest` parameter behaviour for `scl_full()` and `scl_redcap()`:
   initial clusters are always formed from spatially nearest neighbours, and

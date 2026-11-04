@@ -1,6 +1,6 @@
 Package: spatialcluster
 Title: Spatially Contiguous Clustering with the 'Redcap' Algorithm
-Version: 0.2.1.005
+Version: 0.2.1.006
 Authors@R: 
     person("Mark", "Padgham", , "mark.padgham@email.com", role = c("aut", "cre"))
 Description: Groups spatial data into clusters of similar observations, while

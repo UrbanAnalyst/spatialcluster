@@ -11,10 +11,14 @@
 #'
 #' @param xy Rectangular structure (matrix, data.frame, tibble), containing
 #' coordinates of points to be clustered.
-#' @param dmat Square structure (matrix, data.frame, tibble) containing
-#' distances or equivalent metrics between all points in \code{xy}. If \code{xy}
-#' has \code{n} rows, then \code{dat} must have \code{n} rows and \code{n}
-#' columns.
+#' @param dmat Structure (matrix, data.frame, tibble) containing distances or
+#' equivalent metrics between all points in \code{xy}. If \code{xy} has \code{n}
+#' rows, then \code{dmat} may either be square, with \code{n} rows and \code{n}
+#' columns, or in long form, with three columns of (\code{from}, \code{to},
+#' \code{value}). In long form, \code{from} and \code{to} are either integer row
+#' indices of \code{xy} or character values matching \code{rownames (xy)}.
+#' Values may be given for one direction of each pair only, and are then
+#' mirrored; values for all pairs must be present.
 #' @param ncl Desired number of clusters. See description of `ncl_iterate`
 #' parameter for conditions under which actual number may be less than this
 #' value.
@@ -119,7 +123,9 @@ scl_redcap <- function (xy,
 scl_redcap_new <- function (xy, dmat, ncl, full_order, linkage, shortest, nnbs,
                             iterate_ncl, quiet) {
 
+    ids <- rownames (xy)
     xy <- scl_tbl (xy)
+    dmat <- dmat_to_square (dmat, nrow (xy), ids)
 
     # The spatial structure (neighbours and spanning trees) is always built
     # from the nearest spatial neighbours. `shortest` only determines

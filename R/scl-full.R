@@ -47,7 +47,9 @@ scl_full <- function (xy,
 
 scl_full_new <- function (xy, dmat, ncl, linkage, shortest, nnbs) {
 
+    ids <- rownames (xy)
     xy <- scl_tbl (xy)
+    dmat <- dmat_to_square (dmat, nrow (xy), ids)
 
     # The spatial neighbour graph and initial clusters are always built from
     # the nearest spatial neighbours. `shortest` only determines whether

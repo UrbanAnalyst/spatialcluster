@@ -10,10 +10,14 @@ scl_full(xy, dmat, ncl, linkage = "single", shortest = TRUE, nnbs = 6L)
 \item{xy}{Rectangular structure (matrix, data.frame, tibble), containing
 coordinates of points to be clustered.}
 
-\item{dmat}{Square structure (matrix, data.frame, tibble) containing
-distances or equivalent metrics between all points in \code{xy}. If \code{xy}
-has \code{n} rows, then \code{dat} must have \code{n} rows and \code{n}
-columns.}
+\item{dmat}{Structure (matrix, data.frame, tibble) containing distances or
+equivalent metrics between all points in \code{xy}. If \code{xy} has \code{n}
+rows, then \code{dmat} may either be square, with \code{n} rows and \code{n}
+columns, or in long form, with three columns of (\code{from}, \code{to},
+\code{value}). In long form, \code{from} and \code{to} are either integer row
+indices of \code{xy} or character values matching \code{rownames (xy)}.
+Values may be given for one direction of each pair only, and are then
+mirrored; values for all pairs must be present.}
 
 \item{ncl}{Desired number of clusters. See description of `ncl_iterate`
 parameter for conditions under which actual number may be less than this
