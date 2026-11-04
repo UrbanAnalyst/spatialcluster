@@ -1,6 +1,6 @@
 Package: spatialcluster
 Title: Spatially Contiguous Clustering with the 'Redcap' Algorithm
-Version: 0.2.1.004
+Version: 0.2.1.005
 Authors@R: 
     person("Mark", "Padgham", , "mark.padgham@email.com", role = c("aut", "cre"))
 Description: Groups spatial data into clusters of similar observations, while
@@ -12,8 +12,8 @@ Description: Groups spatial data into clusters of similar observations, while
     yielding a minimum spanning tree, or from full-order relationships between
     entire clusters, using single linkage (nearest members), average linkage
     (mean of all pairs), or complete linkage (furthest members). The single and
-    average linkage methods implement the 'Redcap' algorithm ('Regionalization
-    with dynamically constrained agglomerative clustering and partitioning').
+    average linkage methods implement the 'Redcap' algorithm ('Regionalization'
+    with dynamically constrained agglomerative clustering and partitioning).
     Results can be visualised as maps of clusters, cluster hulls, or trees.
 License: GPL-3
 URL: https://UrbanAnalyst.github.io/spatialcluster/,

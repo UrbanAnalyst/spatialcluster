@@ -9,8 +9,8 @@
 #' yielding a minimum spanning tree, or from full-order relationships between
 #' entire clusters, using single linkage (nearest members), average linkage
 #' (mean of all pairs), or complete linkage (furthest members). The single and
-#' average linkage methods implement the 'Redcap' algorithm ('Regionalization
-#' with dynamically constrained agglomerative clustering and partitioning').
+#' average linkage methods implement the 'Redcap' algorithm ('Regionalization'
+#' with dynamically constrained agglomerative clustering and partitioning).
 #' Results can be visualised as maps of clusters, cluster hulls, or trees.
 #'
 #' @name spatialcluster
