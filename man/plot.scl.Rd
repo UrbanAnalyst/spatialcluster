@@ -15,6 +15,9 @@
 a convex hull, and smaller values generating concave hulls. (See
 ?alphashape::ashape for details).}
 }
+\value{
+A \pkg{ggplot2} object.
+}
 \description{
 plot.scl
 }

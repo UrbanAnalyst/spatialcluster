@@ -58,8 +58,10 @@ scl_ahulls <- function (nodes, alpha = 0.1) {
 #' a convex hull, and smaller values generating concave hulls. (See
 #' ?alphashape::ashape for details).
 #' @param ... ignored here
+#' @return A \pkg{ggplot2} object.
 #' @family plot_fns
 #' @export
+#'
 #' @examples
 #' set.seed (1)
 #' n <- 100
@@ -96,7 +98,8 @@ plot.scl <- function (x, ..., hull_alpha = 1) {
     y <- id <- NULL # suppress no visible binding warnings
     hull_aes <- ggplot2::aes (x = x, y = y, group = id)
     hull_width <- 0.5
-    g <- ggplot2::ggplot (xy, ggplot2::aes (x = x, y = y)) +
+
+    ggplot2::ggplot (xy, ggplot2::aes (x = x, y = y)) +
         ggplot2::geom_point (
             size = 5, color = xy$col,
             show.legend = FALSE
@@ -110,8 +113,6 @@ plot.scl <- function (x, ..., hull_alpha = 1) {
             linewidth = hull_width
         ) +
         ggthemes::theme_solarized ()
-
-    g
 }
 
 plot_scl_clean_clusters <- function (x) {

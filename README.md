@@ -2,7 +2,7 @@
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 [![R build
-status](https://github.com/UrbanAnalyst/spatialcluster/workflows/R-CMD-check/badge.svg)](https://github.com/UrbanAnalyst/spatialcluster/actions?query=workflow%3AR-CMD-check)
+status](https://github.com/UrbanAnalyst/spatialcluster/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/UrbanAnalyst/spatialcluster/actions?query=workflow%3AR-CMD-check.yaml)
 [![Project Status:
 WIP](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
 [![codecov](https://codecov.io/gh/UrbanAnalyst/spatialcluster/branch/master/graph/badge.svg)](https://app.codecov.io/gh/UrbanAnalyst/spatialcluster)
@@ -12,7 +12,8 @@ WIP](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.o
 An **R** package for spatially-constrained clustering using either
 distance or covariance matrices. “*Spatially-constrained*” means that
 the data from which clusters are to be formed also map on to spatial
-coordinates, and the constraint is that clusters must be spatially contiguous.
+coordinates, and the constraint is that clusters must be spatially
+contiguous.
 
 The package includes both an implementation of the REDCAP collection of
 efficient yet approximate algorithms described in [D. Guo’s 2008 paper,
@@ -82,11 +83,11 @@ In short:
 - `scl_redcap()` should be used only where data are too large for
   `scl_full()` to be run in a reasonable time.
 
-For clustering a group of `n` points, both of these functions require three
-main arguments:
+For clustering a group of `n` points, both of these functions require
+three main arguments:
 
-1.  A rectangular matrix of spatial coordinates of points to be clustered 
-    (`n` rows; at least 2 columns);
+1.  A rectangular matrix of spatial coordinates of points to be
+    clustered (`n` rows; at least 2 columns);
 2.  An `n`-by-`n` square matrix quantifying relationships between those
     points;
 3.  A single value (`ncl`) specifying the desired number of clusters.
@@ -130,7 +131,7 @@ names (scl)
   clusters and an overall global statistic for the clustering scheme as
   a whole.
 
-See the "_Get Started_" vignette for more details.
+See the “*Get Started*” vignette for more details.
 
 ## A Cautionary Note
 
