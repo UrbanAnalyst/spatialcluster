@@ -1,3 +1,6 @@
+#include <algorithm>
+#include <map>
+
 #include "common.h"
 #include "full-merge.h"
 
@@ -382,105 +385,71 @@ void full_merge::fill_max_dists (full_merge::FullMergeDat &cldat,
     }
 }
 
+// Successively merge pairs of clusters by maximal ("complete") linkage. The
+// distance between two clusters is the largest distance of any edge connecting
+// them (or, if !shortest as for covariance clusters, the smallest value, so
+// that the worst-case connection is always the one used).
 void full_merge::max (full_merge::FullMergeDat &cldat) {
+    AvgDists cl_dists;
+    full_merge::fill_max_dists (cldat, cl_dists);
+
+    while (!cl_dists.avg_dists.empty ()) {
+        full_merge::OneMerge the_merge = full_merge::merge_max (cldat, cl_dists);
+        cldat.merges.push_back (the_merge);
+    }
 }
 
-
+// Merge the pair of clusters at the front of cl_dists.avg_dists, which has the
+// best linkage distance. Convention is to merge cli into clj, so cli
+// disappears. All other entries involving cli are re-mapped to clj, and any
+// resultant duplicate pairs (A-C and B-C both becoming B-C) are collapsed to a
+// single entry with the maximal linkage distance (Lance-Williams update for
+// complete linkage; the minimal value if !shortest).
 full_merge::OneMerge full_merge::merge_max (full_merge::FullMergeDat &cldat,
         full_merge::AvgDists &cl_dists) {
 
-    full_merge::OneDist the_dist = cl_dists.avg_dists [0];
-    const double dtot = the_dist.di + the_dist.dj + the_dist.d;
-    const size_t ntot = the_dist.ni + the_dist.nj + 1;
-    const double average = dtot / static_cast <double> (ntot);
+    const full_merge::OneDist the_dist = cl_dists.avg_dists.front ();
     const int cli = the_dist.cli,
               clj = the_dist.clj;
-    double dmin = INFINITE_DOUBLE; // shortest connecting distance
-    if (!cldat.shortest) {
-        dmin = -dmin;
-    }
-
-    indxset_t cli_indx = cl_dists.cl_map.at (cli),
-              clj_indx = cl_dists.cl_map.at (clj);
-    // update cli_indx & clj_indx entries, and get value of dmin
-    for (auto i: clj_indx) {
-        cl_dists.avg_dists [i].dj = dtot;
-        cl_dists.avg_dists [i].nj = ntot;
-        if (cl_dists.avg_dists [i].cli == cli)
-            cl_dists.avg_dists [i].cli = clj;
-        else if (cl_dists.avg_dists [i].clj == cli)
-            cl_dists.avg_dists [i].clj = clj;
-        if ((cldat.shortest && cl_dists.avg_dists [i].d < dmin) ||
-                (!cldat.shortest && cl_dists.avg_dists [i].d > dmin)) {
-            dmin = cl_dists.avg_dists [i].d;
-        }
-    }
-    for (auto i: cli_indx) {
-        cl_dists.avg_dists [i].di = dtot;
-        cl_dists.avg_dists [i].ni = ntot;
-        if (cl_dists.avg_dists [i].cli == cli) {
-            cl_dists.avg_dists [i].cli = clj;
-        } else if (cl_dists.avg_dists [i].clj == cli) {
-            cl_dists.avg_dists [i].clj = clj;
-        }
-        if ((cldat.shortest && cl_dists.avg_dists [i].d < dmin) ||
-                (!cldat.shortest && cl_dists.avg_dists [i].d > dmin)) {
-            dmin = cl_dists.avg_dists [i].d;
-        }
-    }
-    // Then update all dmin and average dist values
-    for (auto i: clj_indx) {
-        cl_dists.avg_dists [i].d = dmin;
-        cl_dists.avg_dists [i].value =
-            (cl_dists.avg_dists [i].di + dtot + dmin) /
-            static_cast <double> (cl_dists.avg_dists [i].ni + ntot + 1);
-    }
-    for (auto i: cli_indx) {
-        cl_dists.avg_dists [i].d = dmin;
-        cl_dists.avg_dists [i].value =
-            (cl_dists.avg_dists [i].dj + dtot + dmin) /
-            static_cast <double> (cl_dists.avg_dists [i].nj + ntot + 1);
-    }
     cl_dists.avg_dists.pop_front ();
 
-    // These can now have reverse-duplicated entries because after merging A->B
-    // entries A->C and C->B will become B->C and C->B. There can also be D->A
-    // and D->B which will both become D->B.
-    std::vector <int> rm;
-    std::unordered_set <std::string> edge_names;
-    for (size_t i = 0; i < cl_dists.avg_dists.size (); i++) {
-        std::string cij = std::to_string (cl_dists.avg_dists [i].cli) + "-" +
-                          std::to_string (cl_dists.avg_dists [i].clj),
-                    cji = std::to_string (cl_dists.avg_dists [i].clj) + "-" +
-                          std::to_string (cl_dists.avg_dists [i].cli);
-        if (edge_names.find (cij) == edge_names.end () &&
-                edge_names.find (cji) == edge_names.end ()) {
-            edge_names.emplace (cij);
+    std::map <std::pair <int, int>, size_t> pair_index;
+    std::deque <full_merge::OneDist> merged;
+    for (auto di: cl_dists.avg_dists) {
+        if (di.cli == cli)
+            di.cli = clj;
+        if (di.clj == cli)
+            di.clj = clj;
+        if (di.cli == di.clj) // other edge between the merged pair
+            continue;
+
+        const std::pair <int, int> key =
+            std::minmax (di.cli, di.clj);
+        auto it = pair_index.find (key);
+        if (it == pair_index.end ()) {
+            pair_index.emplace (key, merged.size ());
+            merged.push_back (di);
         } else {
-            rm.push_back (static_cast <int> (i));
+            full_merge::OneDist &existing = merged [it->second];
+            if ((cldat.shortest && di.d > existing.d) ||
+                    (!cldat.shortest && di.d < existing.d))
+                existing.d = di.d;
         }
     }
-    std::sort (rm.begin (), rm.end (), std::greater <int> ());
-    for (auto i: rm) {
-        cl_dists.avg_dists.erase (cl_dists.avg_dists.begin () + i);
-    }
+    cl_dists.avg_dists = merged;
 
     if (cldat.shortest) {
         std::sort (cl_dists.avg_dists.begin (), cl_dists.avg_dists.end (),
-                &full_merge::avgdist_sorter_incr);
+                &full_merge::maxdist_sorter_incr);
     } else {
         std::sort (cl_dists.avg_dists.begin (), cl_dists.avg_dists.end (),
-                &full_merge::avgdist_sorter_decr);
+                &full_merge::maxdist_sorter_decr);
     }
-
-    // Finally, update the cl_dists.cli_map & clj_map entries
-    fill_cl_indx_maps (cl_dists);
 
     full_merge::OneMerge the_merge;
     the_merge.cli = cli;
     the_merge.clj = clj;
-    the_merge.merge_dist = average;
-
+    the_merge.merge_dist = the_dist.d;
 
     return the_merge;
 }
@@ -505,7 +474,8 @@ Rcpp::NumericMatrix rcpp_full_merge (
         full_merge::merge_single (clmerge_dat);
     } else if (utils::strfound (linkage, "average")) {
         full_merge::avg (clmerge_dat);
-    } else if (utils::strfound (linkage, "max")) {
+    } else if (utils::strfound (linkage, "max") ||
+            utils::strfound (linkage, "complete")) {
         full_merge::max (clmerge_dat);
     } else {
         Rcpp::stop ("linkage not found for full_merge");
