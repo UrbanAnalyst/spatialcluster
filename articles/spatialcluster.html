@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">spatialcluster</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.1.001</span>
       </span>
     </div>
 
@@ -720,6 +720,129 @@ processes which are potentially unrelated in space. In contrast,
 clusters discerned from analyses of a covariance matrix must by
 definition reflect regions towards or away from which movement of the
 entire, spatially-structured population significantly covaries.</p>
+<div class="section level3">
+<h3 id="a-formal-argument">A formal argument<a class="anchor" aria-label="anchor" href="#a-formal-argument"></a>
+</h3>
+<p>The preceding intuition can be made precise by considering
+destinations only; the argument for origins is identical, with rows
+replacing columns. Let
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>F</mi><annotation encoding="application/x-tex">F</annotation></semantics></math>
+be an
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>×</mo><mi>m</mi></mrow><annotation encoding="application/x-tex">n \times m</annotation></semantics></math>
+observed flow matrix with columns
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>f</mi><mi>a</mi></msub><mo>∈</mo><msup><mi>ℝ</mi><mi>n</mi></msup></mrow><annotation encoding="application/x-tex">f_a \in \mathbb{R}^n</annotation></semantics></math>,
+where
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>f</mi><mrow><mi>i</mi><mi>a</mi></mrow></msub><annotation encoding="application/x-tex">f_{ia}</annotation></semantics></math>
+is the flow from origin
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math>
+to destination
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>a</mi><annotation encoding="application/x-tex">a</annotation></semantics></math>,
+and let
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>S</mi><annotation encoding="application/x-tex">S</annotation></semantics></math>
+be the corresponding spatial interaction model with columns
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>s</mi><mi>a</mi></msub><annotation encoding="application/x-tex">s_a</annotation></semantics></math>.
+Write
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>𝟏</mn><annotation encoding="application/x-tex">\mathbf{1}</annotation></semantics></math>
+for the vector of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>n</mi><annotation encoding="application/x-tex">n</annotation></semantics></math>
+ones, and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>f</mi><mo accent="true">‾</mo></mover><mi>a</mi></msub><mo>=</mo><msup><mn>𝟏</mn><mi>⊤</mi></msup><msub><mi>f</mi><mi>a</mi></msub><mi>/</mi><mi>n</mi></mrow><annotation encoding="application/x-tex">\bar{f}_a = \mathbf{1}^\top f_a /
+n</annotation></semantics></math> for the mean flow to
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>a</mi><annotation encoding="application/x-tex">a</annotation></semantics></math>.</p>
+<p><strong>A net-flow measure sees only one dimension.</strong> Any
+measure of net flow beyond that expected, whether absolute or relative,
+is a function of the aggregate
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>δ</mi><mi>a</mi></msub><mo>=</mo><msub><mover><mi>f</mi><mo accent="true">‾</mo></mover><mi>a</mi></msub><mo>−</mo><msub><mover><mi>s</mi><mo accent="true">‾</mo></mover><mi>a</mi></msub><mo>=</mo><msup><mn>𝟏</mn><mi>⊤</mi></msup><mo stretchy="false" form="prefix">(</mo><msub><mi>f</mi><mi>a</mi></msub><mo>−</mo><msub><mi>s</mi><mi>a</mi></msub><mo stretchy="false" form="postfix">)</mo><mi>/</mi><mi>n</mi></mrow><annotation encoding="application/x-tex">\delta_a = \bar{f}_a - \bar{s}_a = \mathbf{1}^\top (f_a - s_a) / n</annotation></semantics></math>.
+This is the projection of the residual vector
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>f</mi><mi>a</mi></msub><mo>−</mo><msub><mi>s</mi><mi>a</mi></msub><mo>∈</mo><msup><mi>ℝ</mi><mi>n</mi></msup></mrow><annotation encoding="application/x-tex">f_a - s_a \in \mathbb{R}^n</annotation></semantics></math>
+onto the single direction
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>𝟏</mn><annotation encoding="application/x-tex">\mathbf{1}</annotation></semantics></math>.
+Two destinations
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>a</mi><annotation encoding="application/x-tex">a</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>a</mi><mi>′</mi></msup><annotation encoding="application/x-tex">a^\prime</annotation></semantics></math>
+are therefore indistinguishable to such a measure whenever their
+residuals have equal sums, however different the vectors themselves may
+be.</p>
+<p><strong>A covariance sees the remaining
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">n - 1</annotation></semantics></math>
+dimensions.</strong> The covariance between destinations is
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>C</mi><mrow><mi>a</mi><msup><mi>a</mi><mi>′</mi></msup></mrow></msub><mo>=</mo><mfrac><mn>1</mn><mi>n</mi></mfrac><munder><mo>∑</mo><mi>i</mi></munder><mo stretchy="false" form="prefix">(</mo><msub><mi>f</mi><mrow><mi>i</mi><mi>a</mi></mrow></msub><mo>−</mo><msub><mover><mi>f</mi><mo accent="true">‾</mo></mover><mi>a</mi></msub><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="prefix">(</mo><msub><mi>f</mi><mrow><mi>i</mi><msup><mi>a</mi><mi>′</mi></msup></mrow></msub><mo>−</mo><msub><mover><mi>f</mi><mo accent="true">‾</mo></mover><msup><mi>a</mi><mi>′</mi></msup></msub><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mfrac><mn>1</mn><mi>n</mi></mfrac><mo stretchy="false" form="prefix">⟨</mo><mi>P</mi><msub><mi>f</mi><mi>a</mi></msub><mo>,</mo><mi>P</mi><msub><mi>f</mi><msup><mi>a</mi><mi>′</mi></msup></msub><mo stretchy="false" form="postfix">⟩</mo><mo>,</mo><mspace width="2.0em"></mspace><mi>P</mi><mo>=</mo><mi>I</mi><mo>−</mo><mstyle displaystyle="false"><mfrac><mn>1</mn><mi>n</mi></mfrac></mstyle><mn>𝟏</mn><msup><mn>𝟏</mn><mi>⊤</mi></msup><mo>,</mo></mrow><annotation encoding="application/x-tex">
+C_{aa^\prime} = \frac{1}{n} \sum_i (f_{ia} - \bar{f}_a)(f_{ia^\prime} -
+\bar{f}_{a^\prime}) = \frac{1}{n} \langle P f_a, P f_{a^\prime} \rangle,
+\qquad P = I - \tfrac{1}{n} \mathbf{1} \mathbf{1}^\top,
+</annotation></semantics></math> where
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>P</mi><annotation encoding="application/x-tex">P</annotation></semantics></math>
+projects onto the orthogonal complement of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>𝟏</mn><annotation encoding="application/x-tex">\mathbf{1}</annotation></semantics></math>.
+It thus uses exactly the information discarded by the net-flow measure,
+and is unchanged by adding any constant to all flows to a destination
+(so is independent of the net rate of in- or out-flow, as stated above).
+By the Cauchy-Schwarz inequality,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">|</mo><msub><mi>C</mi><mrow><mi>a</mi><msup><mi>a</mi><mi>′</mi></msup></mrow></msub><mo stretchy="false" form="prefix">|</mo><mo>≤</mo><msub><mi>σ</mi><mi>a</mi></msub><msub><mi>σ</mi><msup><mi>a</mi><mi>′</mi></msup></msub></mrow><annotation encoding="application/x-tex">|C_{aa^\prime}| \le \sigma_a \sigma_{a^\prime}</annotation></semantics></math>,
+with equality only if
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><msub><mi>f</mi><mi>a</mi></msub></mrow><annotation encoding="application/x-tex">P f_a</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><msub><mi>f</mi><msup><mi>a</mi><mi>′</mi></msup></msub></mrow><annotation encoding="application/x-tex">P f_{a^\prime}</annotation></semantics></math>
+are parallel; that is, only if flows to
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>a</mi><annotation encoding="application/x-tex">a</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>a</mi><mi>′</mi></msup><annotation encoding="application/x-tex">a^\prime</annotation></semantics></math>
+are related by an affine function <em>at every origin</em>, and not
+merely in aggregate.</p>
+<p><strong>Spatial contiguity does not remedy this for net
+flows.</strong> Suppose the origins are partitioned into two
+sub-populations,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>I</mi><mn>1</mn></msub><annotation encoding="application/x-tex">I_1</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>I</mi><mn>2</mn></msub><annotation encoding="application/x-tex">I_2</annotation></semantics></math>
+with
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">|</mo><msub><mi>I</mi><mn>1</mn></msub><mo stretchy="false" form="prefix">|</mo><mo>=</mo><mo stretchy="false" form="prefix">|</mo><msub><mi>I</mi><mn>2</mn></msub><mo stretchy="false" form="prefix">|</mo><mo>=</mo><mi>n</mi><mi>/</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">|I_1| = |I_2| =
+n/2</annotation></semantics></math>, and that destination
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>a</mi><annotation encoding="application/x-tex">a</annotation></semantics></math>
+attracts flow
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>x</mi><annotation encoding="application/x-tex">x</annotation></semantics></math>
+only from
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>I</mi><mn>1</mn></msub><annotation encoding="application/x-tex">I_1</annotation></semantics></math>,
+while neighbouring
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>a</mi><mi>′</mi></msup><annotation encoding="application/x-tex">a^\prime</annotation></semantics></math>
+attracts the same flow
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>x</mi><annotation encoding="application/x-tex">x</annotation></semantics></math>
+only from
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>I</mi><mn>2</mn></msub><annotation encoding="application/x-tex">I_2</annotation></semantics></math>.
+A spatial interaction model depends only on the sizes of, and distances
+between, origins and destinations, and assigns the same flows
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>s</mi><mi>a</mi></msub><mo>=</mo><msub><mi>s</mi><msup><mi>a</mi><mi>′</mi></msup></msub></mrow><annotation encoding="application/x-tex">s_a = s_{a^\prime}</annotation></semantics></math>
+to the two neighbours. Then
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>f</mi><mo accent="true">‾</mo></mover><mi>a</mi></msub><mo>=</mo><msub><mover><mi>f</mi><mo accent="true">‾</mo></mover><msup><mi>a</mi><mi>′</mi></msup></msub><mo>=</mo><mi>x</mi><mi>/</mi><mn>2</mn><mo>,</mo><mspace width="1.0em"></mspace><mtext mathvariant="normal">so</mtext><mspace width="1.0em"></mspace><msub><mi>δ</mi><mi>a</mi></msub><mo>=</mo><msub><mi>δ</mi><msup><mi>a</mi><mi>′</mi></msup></msub><mo>,</mo></mrow><annotation encoding="application/x-tex">
+\bar{f}_a = \bar{f}_{a^\prime} = x / 2, \quad \text{so} \quad
+\delta_a = \delta_{a^\prime},
+</annotation></semantics></math> and the two destinations are identical
+in terms of net flow, and would be merged first by any of the linkage
+schemes above. Yet the supports of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>f</mi><mi>a</mi></msub><annotation encoding="application/x-tex">f_a</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>f</mi><msup><mi>a</mi><mi>′</mi></msup></msub><annotation encoding="application/x-tex">f_{a^\prime}</annotation></semantics></math>
+are disjoint, so that
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mo>∑</mo><mi>i</mi></msub><msub><mi>f</mi><mrow><mi>i</mi><mi>a</mi></mrow></msub><msub><mi>f</mi><mrow><mi>i</mi><msup><mi>a</mi><mi>′</mi></msup></mrow></msub><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\sum_i f_{ia} f_{ia^\prime} = 0</annotation></semantics></math>
+and
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>C</mi><mrow><mi>a</mi><msup><mi>a</mi><mi>′</mi></msup></mrow></msub><mo>=</mo><mn>0</mn><mo>−</mo><msub><mover><mi>f</mi><mo accent="true">‾</mo></mover><mi>a</mi></msub><msub><mover><mi>f</mi><mo accent="true">‾</mo></mover><msup><mi>a</mi><mi>′</mi></msup></msub><mo>=</mo><mi>−</mi><mfrac><msup><mi>x</mi><mn>2</mn></msup><mn>4</mn></mfrac><mo>&lt;</mo><mn>0</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">
+C_{aa^\prime} = 0 - \bar{f}_a \bar{f}_{a^\prime} = -\frac{x^2}{4} &lt; 0.
+</annotation></semantics></math> Their flows are in fact maximally
+<em>anti</em>-correlated, so the two destinations could never be
+clustered together on the basis of positive net covariance. The spatial
+constraint determines only <em>which pairs may be merged</em>; it does
+not ensure that the merged objects share any structure beyond that
+measured by the chosen dissimilarity. For net flows, that structure is a
+single scalar, and spatially adjacent objects with equal totals but
+unrelated origins will be clustered. For covariances, a cluster of
+mutually positive values
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>C</mi><mrow><mi>a</mi><msup><mi>a</mi><mi>′</mi></msup></mrow></msub><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">C_{aa^\prime} &gt; 0</annotation></semantics></math>
+implies that, on average, the entire population varies in the same
+direction relative to its mean in its flows to every member of the
+cluster, which is precisely the interpretation of covariance clusters
+developed above.</p>
+</div>
 </div>
 <div class="section level2">
 <h2 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
