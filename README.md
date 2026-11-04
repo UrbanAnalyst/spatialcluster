@@ -2,10 +2,10 @@
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 [![R build
-status](https://github.com/mpadge/spatialcluster/workflows/R-CMD-check/badge.svg)](https://github.com/mpadge/spatialcluster/actions?query=workflow%3AR-CMD-check)
+status](https://github.com/UrbanAnalyst/spatialcluster/workflows/R-CMD-check/badge.svg)](https://github.com/UrbanAnalyst/spatialcluster/actions?query=workflow%3AR-CMD-check)
 [![Project Status:
-WIP](http://www.repostatus.org/badges/latest/wip.svg)](http://www.repostatus.org/#wip)
-[![codecov](https://codecov.io/gh/mpadge/spatialcluster/branch/master/graph/badge.svg)](https://codecov.io/gh/mpadge/spatialcluster)
+WIP](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
+[![codecov](https://codecov.io/gh/UrbanAnalyst/spatialcluster/branch/master/graph/badge.svg)](https://app.codecov.io/gh/UrbanAnalyst/spatialcluster)
 
 # spatialcluster
 
@@ -56,7 +56,7 @@ remotes::install_git ("https://codeberg.org/mpadge/spatialcluster")
 remotes::install_git ("https://git.sr.ht/~mpadge/spatialcluster")
 remotes::install_bitbucket ("mpadge/spatialcluster")
 remotes::install_gitlab ("mpadge/spatialcluster")
-remotes::install_github ("mpadge/spatialcluster")
+remotes::install_github ("UrbanAnalyst/spatialcluster")
 ```
 
 ## Usage

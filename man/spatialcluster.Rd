@@ -12,8 +12,9 @@ clustering and partitioning).
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://github.com/mpadge/spatialcluster}
-  \item Report bugs at \url{https://github.com/mpadge/spatialcluster/issues}
+  \item \url{https://UrbanAnalyst.github.io/spatialcluster/}
+  \item \url{https://github.com/UrbanAnalyst/spatialcluster}
+  \item Report bugs at \url{https://github.com/UrbanAnalyst/spatialcluster/issues}
 }
 
 }

@@ -98,7 +98,8 @@ scl <- scl_redcap (xy, dmat, ncl = 4)
 # By default, the spatial tree is cut to minimise within-cluster variation
 # of (\code{shortest}) values of \code{dmat}. Setting \code{shortest = FALSE}
 # instead cuts the same tree to maximise mean within-cluster values of
-# \code{dmat}, as for covariances, and will generally give different clusters:
+# \code{dmat}, as for covariances, and will generally give different
+# clusters:
 scl <- scl_redcap (xy, dmat, ncl = 4, shortest = FALSE)
 # using 'full_order = FALSE' constructs clusters from first-order
 # relationships only; not recommended, but possible nevertheless:

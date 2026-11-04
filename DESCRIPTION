@@ -1,13 +1,14 @@
 Package: spatialcluster
 Title: R port of redcap
-Version: 0.2.0.029
+Version: 0.2.0.036
 Authors@R: 
     person("Mark", "Padgham", , "mark.padgham@email.com", role = c("aut", "cre"))
 Description: R port of redcap (Regionalization with dynamically
     constrained agglomerative clustering and partitioning).
 License: GPL-3
-URL: https://github.com/mpadge/spatialcluster
-BugReports: https://github.com/mpadge/spatialcluster/issues
+URL: https://UrbanAnalyst.github.io/spatialcluster/,
+    https://github.com/UrbanAnalyst/spatialcluster
+BugReports: https://github.com/UrbanAnalyst/spatialcluster/issues
 Depends: 
     R (>= 4.1.0)
 Imports:

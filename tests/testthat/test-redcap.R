@@ -7,10 +7,10 @@ test_that ("structure", {
     dmat <- matrix (runif (n^2), ncol = n)
     scl <- scl_redcap (xy, dmat, ncl = 4)
     expect_is (scl, "scl")
-    expect_true (scl$pars$ncl >= 4)
+    expect_gte (scl$pars$ncl, 4)
     expect_true (all (names (scl) %in%
         c ("tree", "nodes", "pars", "statistics")))
-    expect_true (nrow (scl$tree) < n)
+    expect_lt (nrow (scl$tree), n)
 })
 
 test_that ("methods", {
@@ -20,14 +20,14 @@ test_that ("methods", {
     dmat <- matrix (runif (n^2), ncol = n)
     scl1 <- scl_redcap (xy, dmat, ncl = 4, shortest = FALSE)
     scl2 <- scl_redcap (xy, dmat, ncl = 4, shortest = TRUE)
-    expect_true (!identical (scl1, scl2))
+    expect_false (identical (scl1, scl2))
 
     # these are the default pars:
     scl3 <- scl_redcap (xy, dmat, ncl = 4, full_order = TRUE)
-    expect_true (!identical (scl1, scl2))
+    expect_false (identical (scl1, scl2))
 
     scl4 <- scl_redcap (xy, dmat, ncl = 4, linkage = "single")
-    expect_true (identical (scl3, scl4))
+    expect_identical (scl3, scl4)
     scl5 <- scl_redcap (xy, dmat, ncl = 4, linkage = "average")
     expect_false (identical (scl4, scl5))
     scl6 <- scl_redcap (xy, dmat, ncl = 4, linkage = "complete")
@@ -58,7 +58,7 @@ test_that ("recluster", {
         "scl_redcap is for initial cluster"
     )
     expect_identical (scl2, scl3)
-    expect_true (!identical (scl, scl2))
+    expect_false (identical (scl, scl2))
 })
 
 test_that ("shortest = FALSE uses spatially nearest neighbours", {
@@ -71,7 +71,7 @@ test_that ("shortest = FALSE uses spatially nearest neighbours", {
     e <- scl_edges_nn (scl_tbl (xy), nnbs = 6L)
     dxy <- as.matrix (stats::dist (xy))
     expect_false (is.unsorted (e$d))
-    expect_true (median (e$d) < median (dxy [upper.tri (dxy)]))
+    expect_lt (median (e$d), median (dxy [upper.tri (dxy)]))
 
     for (linkage in c ("single", "average", "complete")) {
         scl <- scl_redcap (xy, dmat,
@@ -80,6 +80,6 @@ test_that ("shortest = FALSE uses spatially nearest neighbours", {
         )
         expect_is (scl, "scl")
         cl <- scl$nodes$cluster [!is.na (scl$nodes$cluster)]
-        expect_true (length (unique (cl)) >= 4L, info = linkage)
+        expect_gte (length (unique (cl)), 4L, label = linkage)
     }
 })

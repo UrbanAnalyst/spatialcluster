@@ -71,7 +71,8 @@
 #' # By default, the spatial tree is cut to minimise within-cluster variation
 #' # of (\code{shortest}) values of \code{dmat}. Setting \code{shortest = FALSE}
 #' # instead cuts the same tree to maximise mean within-cluster values of
-#' # \code{dmat}, as for covariances, and will generally give different clusters:
+#' # \code{dmat}, as for covariances, and will generally give different
+#' # clusters:
 #' scl <- scl_redcap (xy, dmat, ncl = 4, shortest = FALSE)
 #' # using 'full_order = FALSE' constructs clusters from first-order
 #' # relationships only; not recommended, but possible nevertheless:
@@ -108,98 +109,63 @@ scl_redcap <- function (xy,
 
     } else {
 
-        xy <- scl_tbl (xy)
-
-        # The spatial structure (neighbours and spanning trees) is always built
-        # from the nearest spatial neighbours. `shortest` only determines
-        # whether lower or higher values of `dmat` are preferentially merged
-        # when cutting the tree.
-        if (nnbs <= 0) {
-            edges_nn <- scl_edges_tri (xy)
-        } else {
-            edges_nn <- scl_edges_nn (xy, nnbs = nnbs)
-        }
-
-        if (!full_order) {
-
-            tree_full <- scl_spantree_ord1 (edges_nn) [, c ("from", "to")]
-
-        } else {
-
-            if (linkage == "average") {
-
-                tree_full <- scl_spantree_alk (edges_nn, shortest = TRUE)
-
-            } else {
-
-                d_xy <- as.matrix (stats::dist (xy))
-                edges_all <- scl_edges_all (xy, d_xy, shortest = TRUE)
-
-                if (linkage == "single") {
-
-                    tree_full <- scl_spantree_slk (
-                        edges_all,
-                        edges_nn,
-                        shortest = TRUE,
-                        quiet = quiet
-                    )
-
-                } else if (linkage == "complete") {
-
-                    tree_full <- scl_spantree_clk (
-                        edges_all,
-                        edges_nn,
-                        shortest = TRUE,
-                        quiet = quiet
-                    )
-
-                } else {
-
-                    stop (
-                        "linkage must be one of ",
-                        "(single, average, complete)"
-                    )
-                }
-            }
-
-        }
-
-        # Then the critical stage of changing the distance metric on 'edges_nn'
-        # from the spatial distances of 'd_xy' to the data-based distances in
-        # 'dmat':
-        edges_nn <- append_dist_to_edges (edges_nn, dmat, shortest = shortest)
-
-        tree <- scl_cuttree (
-            tree_full,
-            edges_nn,
-            ncl,
-            shortest = shortest,
-            iterate_ncl = iterate_ncl,
-            quiet = quiet
+        scl_redcap_new (
+            xy, dmat, ncl, full_order, linkage, shortest, nnbs,
+            iterate_ncl, quiet
         )
-
-        # meta-data:
-        clo <- c ("single", "full") [match (full_order, c (FALSE, TRUE))]
-        pars <- list (
-            method = "redcap",
-            ncl = ncl,
-            cl_order = clo,
-            linkage = linkage
-        )
-
-        res <- structure (
-            list (
-                tree = tree,
-                nodes = dplyr::bind_cols (tree_nodes (tree), xy),
-                pars = pars
-            ),
-            class = "scl"
-        )
-
-        res <- scl_statistics (res)
-
-        return (res)
     }
+}
+
+scl_redcap_new <- function (xy, dmat, ncl, full_order, linkage, shortest, nnbs,
+                            iterate_ncl, quiet) {
+
+    xy <- scl_tbl (xy)
+
+    # The spatial structure (neighbours and spanning trees) is always built
+    # from the nearest spatial neighbours. `shortest` only determines
+    # whether lower or higher values of `dmat` are preferentially merged
+    # when cutting the tree.
+    if (nnbs <= 0) {
+        edges_nn <- scl_edges_tri (xy)
+    } else {
+        edges_nn <- scl_edges_nn (xy, nnbs = nnbs)
+    }
+
+    tree_full <- redcap_full_tree (xy, edges_nn, full_order, linkage, quiet)
+
+    # Then the critical stage of changing the distance metric on 'edges_nn'
+    # from the spatial distances of 'd_xy' to the data-based distances in
+    # 'dmat':
+    edges_nn <- append_dist_to_edges (edges_nn, dmat, shortest = shortest)
+
+    tree <- scl_cuttree (
+        tree_full,
+        edges_nn,
+        ncl,
+        shortest = shortest,
+        iterate_ncl = iterate_ncl,
+        quiet = quiet
+    )
+
+    # meta-data:
+    clo <- c ("single", "full") [match (full_order, c (FALSE, TRUE))]
+    pars <- list (
+        method = "redcap",
+        ncl = ncl,
+        cl_order = clo,
+        linkage = linkage
+    )
+
+    res <- structure (
+        list (
+            tree = tree,
+            nodes = dplyr::bind_cols (tree_nodes (tree), xy),
+            pars = pars
+        ),
+        class = "scl"
+    )
+
+    return (scl_statistics (res))
 }
 
 # Match cluster numbers in edge tree to actual nodes
@@ -287,4 +253,53 @@ scl_recluster_redcap <- function (scl, ncl, shortest = TRUE, quiet = FALSE) {
         ),
         class = "scl"
     )
+}
+
+redcap_full_tree <- function (xy, edges_nn, full_order, linkage, quiet) {
+
+    if (full_order) {
+
+        if (linkage == "average") {
+
+            tree_full <- scl_spantree_alk (edges_nn, shortest = TRUE)
+
+        } else {
+
+            d_xy <- as.matrix (stats::dist (xy))
+            edges_all <- scl_edges_all (xy, d_xy, shortest = TRUE)
+
+            if (linkage == "single") {
+
+                tree_full <- scl_spantree_slk (
+                    edges_all,
+                    edges_nn,
+                    shortest = TRUE,
+                    quiet = quiet
+                )
+
+            } else if (linkage == "complete") {
+
+                tree_full <- scl_spantree_clk (
+                    edges_all,
+                    edges_nn,
+                    shortest = TRUE,
+                    quiet = quiet
+                )
+
+            } else {
+
+                stop (
+                    "linkage must be one of ",
+                    "(single, average, complete)"
+                )
+            }
+        }
+
+    } else {
+
+        tree_full <- scl_spantree_ord1 (edges_nn) [, c ("from", "to")]
+
+    }
+
+    return (tree_full)
 }
