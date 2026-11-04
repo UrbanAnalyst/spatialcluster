@@ -32,14 +32,17 @@ scl_full <- function (xy,
     } else {
         xy <- scl_tbl (xy)
 
+        # The spatial neighbour graph and initial clusters are always built from
+        # the nearest spatial neighbours. `shortest` only determines whether
+        # the distances in `dmat` are minimised or maximised when merging.
         if (nnbs <= 0) {
-            edges <- scl_edges_tri (xy, shortest = shortest)
+            edges <- scl_edges_tri (xy, shortest = TRUE)
         } else {
-            edges <- scl_edges_nn (xy, nnbs = nnbs, shortest = shortest)
+            edges <- scl_edges_nn (xy, nnbs = nnbs, shortest = TRUE)
         }
 
         # cluster numbers can be joined with edges through either from or to:
-        cl <- as.integer (rcpp_full_initial (edges, shortest) + 1)
+        cl <- as.integer (rcpp_full_initial (edges, TRUE) + 1)
 
         # make 3 vectors of cluster numbers:
         #   1. cl = cluster number for intra-cluster edges only;

@@ -97,6 +97,23 @@ test_that ("rcpp_full_merge linkages", {
     expect_error (rcpp_full_merge (gr, "nonsense", TRUE), "linkage not found")
 })
 
+test_that ("shortest = FALSE (covariance) clustering", {
+    set.seed (1)
+    n <- 100
+    xy <- matrix (runif (2 * n), ncol = 2)
+    dmat <- matrix (runif (n^2), ncol = n)
+    ncl <- 4
+    for (linkage in c ("single", "average", "complete")) {
+        scl <- scl_full (xy, dmat, ncl = ncl, linkage = linkage, shortest = FALSE)
+        expect_is (scl, "scl")
+        cl <- scl$nodes$cluster [!is.na (scl$nodes$cluster)]
+        expect_equal (length (unique (cl)), ncl, info = linkage)
+    }
+    scl <- scl_full (xy, dmat, ncl = ncl, linkage = "complete", shortest = FALSE)
+    expect_true (all (is.finite (scl$merges$dist)))
+    expect_false (is.unsorted (rev (scl$merges$dist)))
+})
+
 test_that ("complete linkage bounded by single linkage", {
     set.seed (2)
     n <- 100
