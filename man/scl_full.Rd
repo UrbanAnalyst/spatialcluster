@@ -19,8 +19,9 @@ columns.}
 parameter for conditions under which actual number may be less than this
 value.}
 
-\item{linkage}{Either \code{"single"} or \code{"average"}. For covariance
-clustering, use \code{"single"} with `shortest = FALSE`.}
+\item{linkage}{One of \code{"single"}, \code{"average"}, or \code{"complete"}.
+For covariance clustering, use \code{shortest = FALSE}; \code{"complete"}
+linkage then uses the smallest connecting value between clusters.}
 
 \item{shortest}{If \code{TRUE}, the \code{dmat} is interpreted as distances
 such that lower values are preferentially selected; if \code{FALSE}, then
@@ -40,8 +41,8 @@ dmat <- matrix (runif (n^2), ncol = n)
 scl <- scl_full (xy, dmat, ncl = 4)
 }
 \seealso{
-Other clustering_fns: 
-\code{\link{scl_recluster}()},
-\code{\link{scl_redcap}()}
+Other clustering_fns:
+\code{\link[=scl_recluster]{scl_recluster()}},
+\code{\link[=scl_redcap]{scl_redcap()}}
 }
 \concept{clustering_fns}

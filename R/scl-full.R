@@ -2,8 +2,9 @@
 #'
 #' Full spatially-constrained clustering.
 #'
-#' @param linkage Either \code{"single"} or \code{"average"}. For covariance
-#' clustering, use \code{"single"} with `shortest = FALSE`.
+#' @param linkage One of \code{"single"}, \code{"average"}, or \code{"complete"}.
+#' For covariance clustering, use \code{shortest = FALSE}; \code{"complete"}
+#' linkage then uses the smallest connecting value between clusters.
 #' @inheritParams scl_redcap
 #'
 #' @family clustering_fns
@@ -20,7 +21,7 @@ scl_full <- function (xy,
                       shortest = TRUE,
                       nnbs = 6L) {
 
-    linkage <- match.arg (tolower (linkage), c ("single", "average"))
+    linkage <- match.arg (tolower (linkage), c ("single", "average", "complete"))
 
     if (methods::is (xy, "scl")) {
         message (

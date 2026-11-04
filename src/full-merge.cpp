@@ -78,7 +78,7 @@ void full_merge::init (const Rcpp::DataFrame &gr,
         }
     }
     // Then just loop over cldat.edges to update min distances
-    for (auto ei: cldat.edges) {
+    for (auto &ei: cldat.edges) {
         std::string eft = std::to_string (ei.from) + "-" +
                           std::to_string (ei.to);
         if ((cldat.shortest && edge_dist_map.at (eft) < ei.dist) ||
