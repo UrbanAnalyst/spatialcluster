@@ -1,29 +1,53 @@
-.PHONY: all build check doc readme test
+RFILE = README
+VIGNETTE = flows
 
-all: doc readme build check
+all: help
 
-build: doc
-	R CMD build .
+doc: ## Update package documentation with `roxygen2`
+	Rscript -e 'roxygen2::roxygenise()'
 
-#check: build
-#	R CMD check spatialcluster*tar.gz
+init: ## Initialize pkgdown site
+	echo "pkgdown::init_site()" | R --no-save -q
 
-clean:
-	-rm -f spatialcluster*tar.gz
-	-rm -fr spatialcluster.Rcheck
-	-rm -fr src/*.{o,so}
+pkgdown: ## Build entire pkgdown site
+	echo "pkgdown::build_site()" | R --no-save -q
 
-doc: clean
-	Rscript -e 'devtools::document()'
+pkgdowncheck: ## Check 'pkgdown' site structure
+	echo "pkgdown::check_pkgdown()" | R --no-save -q
 
-readme:
-	Rscript -e 'rmarkdown::render("README.Rmd")'
+vignette: ## Build pkgdown article
+	echo "pkgdown::build_article('$(VIGNETTE)',quiet=FALSE)" | R --no-save -q
 
-test:
-	Rscript -e 'devtools::test()'
+knith: $(RFILE)-src.Rmd ## Render README as HTML
+	echo "rmarkdown::render('$(RFILE)-src.Rmd',output_file='$(RFILE).html')" | R --no-save -q
 
-check:
+knitr: $(RFILE)-src.Rmd ## Render README as markdown
+	echo "rmarkdown::render('$(RFILE)-src.Rmd',output_file='$(RFILE).md')" | R --no-save -q
+
+open: ## Open main HTML vignette in browser
+	xdg-open docs/articles/$(VIGNETTE).html &
+
+allcon: ## Run 'allcontributors::add_contributors'
+	Rscript -e 'allcontributors::add_contributors(ncols = 6L, check_urls = FALSE)'
+
+check: ## Run `rcmdcheck`
+	Rscript -e 'rcmdcheck::rcmdcheck()'
+
+test: ## Run test suite
+	Rscript -e 'testthat::test_local()'
+
+pkgcheck: ## Run `pkgcheck` and print results to screen.
 	Rscript -e 'library(pkgcheck); checks <- pkgcheck(); print(checks); summary (checks)'
 
-install: clean
-	R CMD INSTALL .
+urls: ## Apply 'urlchecker::url_update()' to update all URLs
+	Rscript -e 'urlchecker::url_update()'
+
+data: ## Run 'data-raw/release-data-script' to (re-)generate release data
+	date; time Rscript "data-raw/release-data-script.R"
+
+clean: ## Clean all junk files, including all pkgdown docs
+	rm -rf *.html *.png README_cache docs/
+
+help: ## Show this help
+	@printf "Usage:\033[36m make [target]\033[0m\n"
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
