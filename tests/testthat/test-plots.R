@@ -31,18 +31,19 @@ test_that ("full plot", {
 })
 
 test_that ("plot_merges", {
+    # Draw to a null device so no Rplots.pdf is generated:
+    grDevices::pdf (NULL)
     set.seed (1)
     n <- 100
     xy <- matrix (runif (2 * n), ncol = 2)
     dmat <- matrix (runif (n^2), ncol = n)
     scl <- scl_full (xy, dmat, ncl = 8)
     expect_silent (plot_merges (scl))
-    graphics.off ()
     expect_silent (plot_merges (scl, root_tree = TRUE))
-    graphics.off ()
     scl <- scl_redcap (xy, dmat, ncl = 8)
     expect_error (
         plot_merges (scl),
         "plot_merges can only be applied to scl objects"
     )
+    graphics.off ()
 })
