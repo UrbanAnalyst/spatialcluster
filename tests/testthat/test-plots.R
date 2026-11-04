@@ -12,7 +12,7 @@ test_that ("redcap plot", {
     # The hulls are then contained in
     h1 <- g1$layers [[2]]$data
     h2 <- g2$layers [[2]]$data
-    expect_true (!identical (h1, h2))
+    expect_false (identical (h1, h2))
 })
 
 test_that ("full plot", {
@@ -27,7 +27,7 @@ test_that ("full plot", {
     # The hulls are then contained in
     h1 <- g1$layers [[2]]$data
     h2 <- g2$layers [[2]]$data
-    expect_true (!identical (h1, h2))
+    expect_false (identical (h1, h2))
 })
 
 test_that ("plot_merges", {
