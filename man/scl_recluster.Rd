@@ -38,8 +38,8 @@ plot (scl)
 
 }
 \seealso{
-Other clustering_fns: 
-\code{\link{scl_full}()},
-\code{\link{scl_redcap}()}
+Other clustering_fns:
+\code{\link[=scl_full]{scl_full()}},
+\code{\link[=scl_redcap]{scl_redcap()}}
 }
 \concept{clustering_fns}

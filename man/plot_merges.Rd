@@ -19,7 +19,7 @@ Nothing (generates plot)
 Plot dendrogram of merges for \code{scl} object with \code{method = "full"}.
 }
 \seealso{
-Other plot_fns: 
-\code{\link{plot.scl}()}
+Other plot_fns:
+\code{\link[=plot.scl]{plot.scl()}}
 }
 \concept{plot_fns}

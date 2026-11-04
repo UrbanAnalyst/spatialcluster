@@ -87,8 +87,8 @@ scl <- scl_redcap (xy, dmat, ncl = 4, full_order = FALSE)
 
 }
 \seealso{
-Other clustering_fns: 
-\code{\link{scl_full}()},
-\code{\link{scl_recluster}()}
+Other clustering_fns:
+\code{\link[=scl_full]{scl_full()}},
+\code{\link[=scl_recluster]{scl_recluster()}}
 }
 \concept{clustering_fns}

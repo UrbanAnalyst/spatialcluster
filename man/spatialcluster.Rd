@@ -20,5 +20,10 @@ Useful links:
 \author{
 \strong{Maintainer}: Mark Padgham \email{mark.padgham@email.com}
 
+Authors:
+\itemize{
+  \item Mark Padgham \email{mark.padgham@email.com}
+}
+
 }
 \concept{package}
