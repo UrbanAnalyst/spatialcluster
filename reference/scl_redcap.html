@@ -18,7 +18,7 @@ Constrained Agglomerative clustering and Partitioning) routines."><!-- mathjax -
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">spatialcluster</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.1.005</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.1.006</span>
       </span>
     </div>
 
@@ -81,10 +81,14 @@ coordinates of points to be clustered.</p></dd>
 
 
 <dt id="arg-dmat">dmat<a class="anchor" aria-label="anchor" href="#arg-dmat"></a></dt>
-<dd><p>Square structure (matrix, data.frame, tibble) containing
-distances or equivalent metrics between all points in <code>xy</code>. If <code>xy</code>
-has <code>n</code> rows, then <code>dat</code> must have <code>n</code> rows and <code>n</code>
-columns.</p></dd>
+<dd><p>Structure (matrix, data.frame, tibble) containing distances or
+equivalent metrics between all points in <code>xy</code>. If <code>xy</code> has <code>n</code>
+rows, then <code>dmat</code> may either be square, with <code>n</code> rows and <code>n</code>
+columns, or in long form, with three columns of (<code>from</code>, <code>to</code>,
+<code>value</code>). In long form, <code>from</code> and <code>to</code> are either integer row
+indices of <code>xy</code> or character values matching <code>rownames (xy)</code>.
+Values may be given for one direction of each pair only, and are then
+mirrored; values for all pairs must be present.</p></dd>
 
 
 <dt id="arg-ncl">ncl<a class="anchor" aria-label="anchor" href="#arg-ncl"></a></dt>
