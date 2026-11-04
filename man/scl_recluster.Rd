@@ -14,9 +14,14 @@ parameter for conditions under which actual number may be less than this
 value.}
 
 \item{shortest}{If \code{TRUE}, the \code{dmat} is interpreted as distances
-such that lower values are preferentially selected; if \code{FALSE}, then
-higher values of \code{dmat} are interpreted to indicate stronger
-relationships, as is the case for example with covariances.}
+such that lower values indicate stronger relationships, and the tree is cut
+to minimise the within-cluster sum of squared deviations of \code{dmat}
+values. If \code{FALSE}, then higher values of \code{dmat} are interpreted
+to indicate stronger relationships, as is the case for example with
+covariances, and the tree is cut to maximise the mean \code{dmat} value
+within clusters. This parameter only affects how the tree is cut; it has no
+effect on construction of the spanning tree, which is always based on
+spatial distances.}
 
 \item{quiet}{If `FALSE` (default), display progress information on screen.}
 }

@@ -4,7 +4,10 @@
 #'
 #' @param linkage One of \code{"single"}, \code{"average"}, or \code{"complete"}.
 #' For covariance clustering, use \code{shortest = FALSE}; \code{"complete"}
-#' linkage then uses the smallest connecting value between clusters.
+#' linkage then uses the smallest connecting value between clusters. As for
+#' \link{scl_redcap}, initial clusters are always formed from spatially nearest
+#' neighbours; \code{shortest} and \code{linkage} determine only how these are
+#' then merged according to \code{dmat}.
 #' @inheritParams scl_redcap
 #'
 #' @family clustering_fns

@@ -21,15 +21,24 @@ value.}
 
 \item{linkage}{One of \code{"single"}, \code{"average"}, or \code{"complete"}.
 For covariance clustering, use \code{shortest = FALSE}; \code{"complete"}
-linkage then uses the smallest connecting value between clusters.}
+linkage then uses the smallest connecting value between clusters. As for
+\link{scl_redcap}, initial clusters are always formed from spatially nearest
+neighbours; \code{shortest} and \code{linkage} determine only how these are
+then merged according to \code{dmat}.}
 
 \item{shortest}{If \code{TRUE}, the \code{dmat} is interpreted as distances
-such that lower values are preferentially selected; if \code{FALSE}, then
-higher values of \code{dmat} are interpreted to indicate stronger
-relationships, as is the case for example with covariances.}
+such that lower values indicate stronger relationships, and the tree is cut
+to minimise the within-cluster sum of squared deviations of \code{dmat}
+values. If \code{FALSE}, then higher values of \code{dmat} are interpreted
+to indicate stronger relationships, as is the case for example with
+covariances, and the tree is cut to maximise the mean \code{dmat} value
+within clusters. This parameter only affects how the tree is cut; it has no
+effect on construction of the spanning tree, which is always based on
+spatial distances.}
 
-\item{nnbs}{Number of nearest neighbours to be used in calculating clustering
-trees. Triangulation will be used if \code{nnbs <= 0}.}
+\item{nnbs}{Number of spatially nearest neighbours to be used in calculating
+clustering trees, irrespective of \code{shortest}. Triangulation will be
+used if \code{nnbs <= 0}.}
 }
 \description{
 Full spatially-constrained clustering.

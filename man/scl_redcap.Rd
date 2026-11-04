@@ -36,12 +36,18 @@ relationships only, otherwise build from full-order relationships (see Note).}
 \code{"complete"}; see Note.}
 
 \item{shortest}{If \code{TRUE}, the \code{dmat} is interpreted as distances
-such that lower values are preferentially selected; if \code{FALSE}, then
-higher values of \code{dmat} are interpreted to indicate stronger
-relationships, as is the case for example with covariances.}
+such that lower values indicate stronger relationships, and the tree is cut
+to minimise the within-cluster sum of squared deviations of \code{dmat}
+values. If \code{FALSE}, then higher values of \code{dmat} are interpreted
+to indicate stronger relationships, as is the case for example with
+covariances, and the tree is cut to maximise the mean \code{dmat} value
+within clusters. This parameter only affects how the tree is cut; it has no
+effect on construction of the spanning tree, which is always based on
+spatial distances.}
 
-\item{nnbs}{Number of nearest neighbours to be used in calculating clustering
-trees. Triangulation will be used if \code{nnbs <= 0}.}
+\item{nnbs}{Number of spatially nearest neighbours to be used in calculating
+clustering trees, irrespective of \code{shortest}. Triangulation will be
+used if \code{nnbs <= 0}.}
 
 \item{iterate_ncl}{Actual numbers of clusters found may be less than the
 specified value of `ncl`, because clusters formed from < 3 edges are removed.
@@ -64,11 +70,22 @@ rather than calculating clusters anew.
 Cluster spatial data with REDCAP (REgionalization with Dynamically
 Constrained Agglomerative clustering and Partitioning) routines.
 }
+\details{
+Clustering is in two stages. First, a spanning tree is constructed from the
+**spatial** relationships between points in \code{xy} alone, using the
+nearest spatial neighbours (see \code{nnbs}), and independent of both
+\code{dmat} and \code{shortest}. Second, that tree is cut into \code{ncl}
+clusters by evaluating the values of \code{dmat} along its edges.
+}
 \note{
 Please refer to the original REDCAP paper ('Regionalization with
 dynamically constrained agglomerative clustering and partitioning (REDCAP)',
 by D. Guo (2008), Int.J.Geo.Inf.Sci 22:801-823) for details of the
-\code{full_order} and \code{linkage} parameters. This paper clearly
+\code{full_order} and \code{linkage} parameters. Note that, unlike the
+original, the spanning trees constructed here (for all values of
+\code{linkage}) are based on spatial distances between points in \code{xy},
+with \code{dmat} used only when cutting the trees into clusters. This paper
+clearly
 demonstrates the general inferiority of spanning trees constructed from
 first-order relationships. It is therefore strongly recommended that the
 default \code{full_order = TRUE} be used at all times.
@@ -78,8 +95,10 @@ n <- 100
 xy <- matrix (runif (2 * n), ncol = 2)
 dmat <- matrix (runif (n^2), ncol = n)
 scl <- scl_redcap (xy, dmat, ncl = 4)
-# Those clusters will by default be constructed by connecting edges with the
-# lowest (\code{shortest}) values of \code{dmat}, and will differ from
+# By default, the spatial tree is cut to minimise within-cluster variation
+# of (\code{shortest}) values of \code{dmat}. Setting \code{shortest = FALSE}
+# instead cuts the same tree to maximise mean within-cluster values of
+# \code{dmat}, as for covariances, and will generally give different clusters:
 scl <- scl_redcap (xy, dmat, ncl = 4, shortest = FALSE)
 # using 'full_order = FALSE' constructs clusters from first-order
 # relationships only; not recommended, but possible nevertheless:
