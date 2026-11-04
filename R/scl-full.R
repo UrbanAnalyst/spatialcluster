@@ -2,9 +2,18 @@
 #'
 #' Full spatially-constrained clustering.
 #'
-#' @param linkage Either \code{"single"} or \code{"average"}. For covariance
-#' clustering, use \code{"single"} with `shortest = FALSE`.
+#' @param linkage One of \code{"single"}, \code{"average"}, or \code{"complete"}.
+#' For covariance clustering, use \code{shortest = FALSE}; \code{"complete"}
+#' linkage then uses the smallest connecting value between clusters. As for
+#' \link{scl_redcap}, initial clusters are always formed from spatially nearest
+#' neighbours; \code{shortest} and \code{linkage} determine only how these are
+#' then merged according to \code{dmat}.
 #' @inheritParams scl_redcap
+#'
+#' @return A object of class \code{scl} with \code{tree} containing the
+#' clustering scheme, and \code{xy} the original coordinate data of the
+#' clustered points. An additional component, \code{tree_rest}, enables the tree
+#' to be re-cut to a different number of clusters via \link{scl_recluster}.
 #'
 #' @family clustering_fns
 #' @export
@@ -20,7 +29,7 @@ scl_full <- function (xy,
                       shortest = TRUE,
                       nnbs = 6L) {
 
-    linkage <- match.arg (tolower (linkage), c ("single", "average"))
+    linkage <- match.arg (tolower (linkage), c ("single", "average", "complete"))
 
     if (methods::is (xy, "scl")) {
         message (
@@ -31,14 +40,17 @@ scl_full <- function (xy,
     } else {
         xy <- scl_tbl (xy)
 
+        # The spatial neighbour graph and initial clusters are always built from
+        # the nearest spatial neighbours. `shortest` only determines whether
+        # the distances in `dmat` are minimised or maximised when merging.
         if (nnbs <= 0) {
-            edges <- scl_edges_tri (xy, shortest = shortest)
+            edges <- scl_edges_tri (xy)
         } else {
-            edges <- scl_edges_nn (xy, nnbs = nnbs, shortest = shortest)
+            edges <- scl_edges_nn (xy, nnbs = nnbs)
         }
 
         # cluster numbers can be joined with edges through either from or to:
-        cl <- as.integer (rcpp_full_initial (edges, shortest) + 1)
+        cl <- as.integer (rcpp_full_initial (edges, TRUE) + 1)
 
         # make 3 vectors of cluster numbers:
         #   1. cl = cluster number for intra-cluster edges only;
