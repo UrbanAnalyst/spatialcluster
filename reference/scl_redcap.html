@@ -18,7 +18,7 @@ Constrained Agglomerative clustering and Partitioning) routines."><!-- mathjax -
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">spatialcluster</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0.029</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0.036</span>
       </span>
     </div>
 
@@ -29,8 +29,11 @@ Constrained Agglomerative clustering and Partitioning) routines."><!-- mathjax -
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
+<li>
+  <a href="../news/index.html">Changelog</a>
+</li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://github.com/mpadge/spatialcluster/" class="external-link">
+  <a href="https://github.com/UrbanAnalyst/spatialcluster/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
 
   </a>
@@ -45,7 +48,7 @@ Constrained Agglomerative clustering and Partitioning) routines."><!-- mathjax -
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>scl_redcap</h1>
-    <small class="dont-index">Source: <a href="https://github.com/mpadge/spatialcluster/blob/main/R/scl-redcap.R" class="external-link"><code>R/scl-redcap.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/UrbanAnalyst/spatialcluster/blob/main/R/scl-redcap.R" class="external-link"><code>R/scl-redcap.R</code></a></small>
     <div class="hidden name"><code>scl_redcap.Rd</code></div>
     </div>
 
@@ -178,7 +181,8 @@ default <code>full_order = TRUE</code> be used at all times.</p>
 <span class="r-in"><span><span class="co"># By default, the spatial tree is cut to minimise within-cluster variation</span></span></span>
 <span class="r-in"><span><span class="co"># of (\code{shortest}) values of \code{dmat}. Setting \code{shortest = FALSE}</span></span></span>
 <span class="r-in"><span><span class="co"># instead cuts the same tree to maximise mean within-cluster values of</span></span></span>
-<span class="r-in"><span><span class="co"># \code{dmat}, as for covariances, and will generally give different clusters:</span></span></span>
+<span class="r-in"><span><span class="co"># \code{dmat}, as for covariances, and will generally give different</span></span></span>
+<span class="r-in"><span><span class="co"># clusters:</span></span></span>
 <span class="r-in"><span><span class="va">scl</span> <span class="op">&lt;-</span> <span class="fu">scl_redcap</span> <span class="op">(</span><span class="va">xy</span>, <span class="va">dmat</span>, ncl <span class="op">=</span> <span class="fl">4</span>, shortest <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># using 'full_order = FALSE' constructs clusters from first-order</span></span></span>
 <span class="r-in"><span><span class="co"># relationships only; not recommended, but possible nevertheless:</span></span></span>

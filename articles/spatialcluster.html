@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">spatialcluster</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0.029</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0.036</span>
       </span>
     </div>
 
@@ -43,10 +43,13 @@
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
+<li>
+  <a href="../news/index.html">Changelog</a>
+</li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/mpadge/spatialcluster/" class="external-link">
+  <a href="https://github.com/UrbanAnalyst/spatialcluster/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
 
   </a>
@@ -70,7 +73,7 @@ Padgham</h4>
             
             <h4 data-toc-skip class="date">2026-11-04</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/mpadge/spatialcluster/blob/main/vignettes/spatialcluster.Rmd" class="external-link"><code>vignettes/spatialcluster.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/UrbanAnalyst/spatialcluster/blob/main/vignettes/spatialcluster.Rmd" class="external-link"><code>vignettes/spatialcluster.Rmd</code></a></small>
       <div class="hidden name"><code>spatialcluster.Rmd</code></div>
 
     </div>
@@ -241,16 +244,16 @@ dispersed.</p>
 </h3>
 <p>Spatial clustering is a very well-studied field <span class="citation">(see reviews in Han et al. 2001; Duque et al. 2007; Lu
 2009)</span>, with many methods implemented in the <strong>R</strong>
-language (see the CRAN Task View on <a href="https://cran.r-project.org/web/views/Spatial.html" class="external-link">Analysis of
-Spatial Data</a>). Spatial clustering algorithms take as input a set of
-spatial distances between objects, and seek to cluster those objects
-based on these exclusively spatial distances alone (Fig. 1A). Other
-non-spatial data may be included, but must be somehow reconciled with
-the spatial component. This is often achieved through weighted addition
-to attain approximately “spatialized” data. Figure 1B-C illustrate two
-related non-spatial (B) and spatial (C) datasets. The primary data of
-interest depicted in B can be “spatialized” through additively combining
-the associated distance matrices of non-spatial and spatial data, and
+language (see the CRAN Task View on <a href="https://CRAN.R-project.org/view=Spatial" class="external-link">Analysis of Spatial
+Data</a>). Spatial clustering algorithms take as input a set of spatial
+distances between objects, and seek to cluster those objects based on
+these exclusively spatial distances alone (Fig. 1A). Other non-spatial
+data may be included, but must be somehow reconciled with the spatial
+component. This is often achieved through weighted addition to attain
+approximately “spatialized” data. Figure 1B-C illustrate two related
+non-spatial (B) and spatial (C) datasets. The primary data of interest
+depicted in B can be “spatialized” through additively combining the
+associated distance matrices of non-spatial and spatial data, and
 submitting the resultant distance matrix to a clustering routine of
 choice.</p>
 <div class="figure">
@@ -266,7 +269,7 @@ spatial clusters.
 <code>DBSCAN</code> algorithm (<strong>D</strong>ensity
 <strong>B</strong>ased <strong>S</strong>patial
 <strong>C</strong>lustering of <strong>A</strong>pplications with
-<strong>N</strong>oise) from the <strong>R</strong> package <a href="https://cran.r-project.org/package=dbscan" class="external-link"><code>dbscan</code></a>.</p>
+<strong>N</strong>oise) from the <strong>R</strong> package <a href="https://CRAN.R-project.org/package=dbscan" class="external-link"><code>dbscan</code></a>.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">d_nospace</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/dist.html" class="external-link">dist</a></span> <span class="op">(</span><span class="va">dat_nospace</span><span class="op">)</span> <span class="co"># matrix of non-spatial data</span></span>
 <span><span class="va">d_space</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/dist.html" class="external-link">dist</a></span> <span class="op">(</span><span class="va">dat_space</span><span class="op">)</span> <span class="co"># 2-column matrix of spatial data</span></span>
@@ -306,12 +309,12 @@ Figure 2: (A) Non-spatial data coloured by dbscan clustering results;
 obtained through simple linear combination of non-spatial and spatial
 distances. This approach is very simple, and it is very easy to submit
 such combined distance matrices to high-performance clustering routines
-such as <a href="https://cran.r-project.org/package=dbscan" class="external-link"><code>dbscan</code></a>.
+such as <a href="https://CRAN.R-project.org/package=dbscan" class="external-link"><code>dbscan</code></a>.
 There are nevertheless two notable shortcomings:</p>
 <ol style="list-style-type: decimal">
 <li>There is no objectively best way to combine non-spatial and spatial
 distance matrices; and</li>
-<li>Routines such as <a href="https://cran.r-project.org/package=dbscan" class="external-link"><code>dbscan</code></a>
+<li>Routines such as <a href="https://CRAN.R-project.org/package=dbscan" class="external-link"><code>dbscan</code></a>
 still require an effectively arbitrary parameter represented by the
 above value of <code>eps = 0.4</code>. This value was simply chosen to
 best reflect the known structure of the input clusters, but in any
@@ -331,7 +334,7 @@ explore.</p>
 <div class="section level2">
 <h2 id="spatially-constrained-clustering">Spatially-constrained clustering<a class="anchor" aria-label="anchor" href="#spatially-constrained-clustering"></a>
 </h2>
-<p>The <a href="https://github.com/mpadge/spatialcluster" class="external-link"><code>spatialcluster</code>
+<p>The <a href="https://github.com/UrbanAnalyst/spatialcluster" class="external-link"><code>spatialcluster</code>
 package</a> performs strict <em>spatially constrained clustering</em>.
 This means that clusters are formed entirely on the basis of the
 non-spatial data, while the spatial data provide a constraint used to
@@ -343,7 +346,7 @@ ensure that all clusters are spatially contiguous.</p>
 clustering is the so-called “SKATER” algorithm <span class="citation">(<strong>S</strong>patial <strong>K</strong>luster
 <strong>A</strong>nalysis by <strong>T</strong>ree <strong>E</strong>dge
 <strong>R</strong>emoval, AssunÇão et al. 2006)</span>, available via
-the <strong>R</strong> package <a href="https://cran.r-project.org/package=spdep" class="external-link"><code>spdep</code></a>
+the <strong>R</strong> package <a href="https://CRAN.R-project.org/package=spdep" class="external-link"><code>spdep</code></a>
 <span class="citation">(Bivand et al. 2013; Bivand and Piras
 2015)</span>. This algorithm constructs a minimum spanning tree (MST)
 connecting neighbours defined by the spatial data, with all connections
@@ -699,7 +702,7 @@ spatially-structured population significantly covaries.</p>
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
 <p>Plus extra refs:</p>
-<p><a href="http://www.kdd.org/kdd2017/papers/view/toeplitz-inverse-covariance-based-clustering-of-multivariate-time-series-da" class="external-link uri">http://www.kdd.org/kdd2017/papers/view/toeplitz-inverse-covariance-based-clustering-of-multivariate-time-series-da</a></p>
+<p><a href="https://www.kdd.org/kdd2017/papers/view/toeplitz-inverse-covariance-based-clustering-of-multivariate-time-series-da" class="external-link uri">https://www.kdd.org/kdd2017/papers/view/toeplitz-inverse-covariance-based-clustering-of-multivariate-time-series-da</a></p>
 <p><a href="https://www.rdocumentation.org/packages/multiwayvcov/versions/1.2.3/topics/cluster.vcov" class="external-link uri">https://www.rdocumentation.org/packages/multiwayvcov/versions/1.2.3/topics/cluster.vcov</a></p>
 <div id="refs" class="references csl-bib-body hanging-indent">
 <div id="ref-Assuncao2006" class="csl-entry">

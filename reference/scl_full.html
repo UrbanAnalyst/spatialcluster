@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">spatialcluster</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0.029</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0.036</span>
       </span>
     </div>
 
@@ -28,8 +28,11 @@
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
+<li>
+  <a href="../news/index.html">Changelog</a>
+</li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://github.com/mpadge/spatialcluster/" class="external-link">
+  <a href="https://github.com/UrbanAnalyst/spatialcluster/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
 
   </a>
@@ -44,7 +47,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>scl_full</h1>
-    <small class="dont-index">Source: <a href="https://github.com/mpadge/spatialcluster/blob/main/R/scl-full.R" class="external-link"><code>R/scl-full.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/UrbanAnalyst/spatialcluster/blob/main/R/scl-full.R" class="external-link"><code>R/scl-full.R</code></a></small>
     <div class="hidden name"><code>scl_full.Rd</code></div>
     </div>
 
@@ -79,12 +82,12 @@ value.</p></dd>
 
 
 <dt id="arg-linkage">linkage<a class="anchor" aria-label="anchor" href="#arg-linkage"></a></dt>
-<dd><p>One of <code>"single"</code>, <code>"average"</code>, or <code>"complete"</code>.
-For covariance clustering, use <code>shortest = FALSE</code>; <code>"complete"</code>
-linkage then uses the smallest connecting value between clusters. As for
-<a href="scl_redcap.html">scl_redcap</a>, initial clusters are always formed from spatially nearest
-neighbours; <code>shortest</code> and <code>linkage</code> determine only how these are
-then merged according to <code>dmat</code>.</p></dd>
+<dd><p>One of <code>"single"</code>, <code>"average"</code>, or
+<code>"complete"</code>. For covariance clustering, use <code>shortest = FALSE</code>;
+<code>"complete"</code> linkage then uses the smallest connecting value between
+clusters. As for <a href="scl_redcap.html">scl_redcap</a>, initial clusters are always formed from
+spatially nearest neighbours; <code>shortest</code> and <code>linkage</code> determine
+only how these are then merged according to <code>dmat</code>.</p></dd>
 
 
 <dt id="arg-shortest">shortest<a class="anchor" aria-label="anchor" href="#arg-shortest"></a></dt>
