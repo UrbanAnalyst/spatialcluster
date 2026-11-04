@@ -153,7 +153,7 @@ number of clusters, while negative covariances remain more dispersed.
 Spatial clustering is a very well-studied field [see reviews in @Han2001;
 @Duque2007; @Lu2009], with many methods implemented in the **R** language (see
 the CRAN Task View on [Analysis of Spatial
-Data](https://cran.r-project.org/web/views/Spatial.html)). Spatial clustering
+Data](https://CRAN.R-project.org/view=Spatial)). Spatial clustering
 algorithms take as input a set of spatial distances between objects, and seek to
 cluster those objects based on these exclusively spatial distances alone (Fig.
 1A). Other non-spatial data may be included, but must be somehow reconciled with
@@ -199,7 +199,7 @@ plot (dat$x, dat$y,
 For example, the following code illustrates the use of the `DBSCAN` algorithm
 (**D**ensity **B**ased **S**patial **C**lustering of
 **A**pplications with **N**oise) from the **R** package
-[`dbscan`](https://cran.r-project.org/package=dbscan).
+[`dbscan`](https://CRAN.R-project.org/package=dbscan).
 ```{r, echo = FALSE}
 set.seed (3)
 dat_nospace <- getdat (ncl = 5, noise = 0.1)
@@ -244,12 +244,12 @@ These results demonstrate that reasonable results can indeed be obtained through
 simple linear combination of non-spatial and spatial distances. This approach is
 very simple, and it is very easy to submit such combined distance matrices to
 high-performance clustering routines such as
-[`dbscan`](https://cran.r-project.org/package=dbscan). There are nevertheless
+[`dbscan`](https://CRAN.R-project.org/package=dbscan). There are nevertheless
 two notable shortcomings:
 
 1. There is no objectively best way to combine non-spatial and spatial distance
    matrices; and
-2. Routines such as [`dbscan`](https://cran.r-project.org/package=dbscan) still
+2. Routines such as [`dbscan`](https://CRAN.R-project.org/package=dbscan) still
    require an effectively arbitrary parameter represented by the above value of
    `eps = 0.4`. This value was simply chosen to best reflect the known structure
    of the input clusters, but in any practical application will remain largely
@@ -266,7 +266,7 @@ providing spatially-constrained clusters in the sense we now explore.
 # Spatially-constrained clustering
 
 The [`spatialcluster`
-package](https://github.com/mpadge/spatialcluster) performs strict *spatially
+package](https://github.com/UrbanAnalyst/spatialcluster) performs strict *spatially
 constrained clustering*. This means that clusters are formed entirely on the
 basis of the non-spatial data, while the spatial data provide a constraint used
 to ensure that all clusters are spatially contiguous.
@@ -276,7 +276,7 @@ to ensure that all clusters are spatially contiguous.
 One of the most widespread algorithms for spatially constrained clustering is
 the so-called "SKATER" algorithm [**S**patial **K**luster **A**nalysis by
 **T**ree **E**dge **R**emoval, @Assuncao2006], available via the **R** package
-[`spdep`](https://cran.r-project.org/package=spdep) [@Bivand2013; @Bivand2015].
+[`spdep`](https://CRAN.R-project.org/package=spdep) [@Bivand2013; @Bivand2015].
 This algorithm constructs a minimum spanning tree (MST) connecting neighbours
 defined by the spatial data, with all connections defined by minimal distances
 in the non-spatial data. The SKATER algorithm constructs the simplest of all
@@ -576,6 +576,6 @@ TODO: Now develop a proper mathematical argument for this
 
 Plus extra refs:
 
-http://www.kdd.org/kdd2017/papers/view/toeplitz-inverse-covariance-based-clustering-of-multivariate-time-series-da
+https://www.kdd.org/kdd2017/papers/view/toeplitz-inverse-covariance-based-clustering-of-multivariate-time-series-da
 
 https://www.rdocumentation.org/packages/multiwayvcov/versions/1.2.3/topics/cluster.vcov
