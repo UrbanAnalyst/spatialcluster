@@ -4,8 +4,8 @@
 
 // --------- FULL CLUSTER ----------------
 
-/* All `index2cl` values are initally set to -1, and there are no `cl2index`
- * values.  There is also a single binary vector of `index_in_cluster`, initialy
+/* All `index2cl` values are initially set to -1, and there are no `cl2index`
+ * values.  There is also a single binary vector of `index_in_cluster`, initially
  * set to `false`.
  */
 

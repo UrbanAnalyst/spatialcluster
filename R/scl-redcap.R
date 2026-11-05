@@ -193,7 +193,7 @@ tree_nodes <- function (tree) {
     return (res)
 }
 
-#' scl_reccluster
+#' scl_recluster
 #'
 #' Re-cut a spatial cluster tree (\code{scl}) at a different number of clusters.
 #'
