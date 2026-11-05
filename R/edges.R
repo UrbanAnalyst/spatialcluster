@@ -61,7 +61,7 @@ scl_edges_tri <- function (xy) {
 #' @noRd
 scl_edges_nn <- function (xy, nnbs) {
 
-    # Initially contruct with nnbs + 1, because the `d` matrix includes
+    # Initially construct with nnbs + 1, because the `d` matrix includes
     # self-distances of zero, which are subsequently removed.
     nnbs <- nnbs + 1
     d <- apply (

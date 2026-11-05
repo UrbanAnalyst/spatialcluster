@@ -122,7 +122,7 @@ full_realign_tree <- function (edges, nodes) {
 #' order_merges
 #'
 #' Order merges so they can be plotted as dendrogram
-#' @param merges output from rccp_full_merge
+#' @param merges output from rcpp_full_merge
 #' @noRd
 order_merges <- function (merges) {
 
