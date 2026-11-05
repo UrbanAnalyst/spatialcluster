@@ -2,7 +2,7 @@
 % Please edit documentation in R/scl-redcap.R
 \name{scl_recluster}
 \alias{scl_recluster}
-\title{scl_reccluster}
+\title{scl_recluster}
 \usage{
 scl_recluster(scl, ncl, shortest = TRUE, quiet = FALSE)
 }

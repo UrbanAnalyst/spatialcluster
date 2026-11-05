@@ -27,7 +27,8 @@ scl_full <- function (xy,
                       ncl,
                       linkage = "single",
                       shortest = TRUE,
-                      nnbs = 6L) {
+                      nnbs = 6L,
+                      boundary = NULL) {
 
     linkage <- match.arg (
         tolower (linkage),
@@ -41,11 +42,12 @@ scl_full <- function (xy,
         )
         scl_recluster_full (xy, ncl = ncl)
     } else {
-        scl_full_new (xy, dmat, ncl, linkage, shortest, nnbs)
+        scl_full_new (xy, dmat, ncl, linkage, shortest, nnbs, boundary)
     }
 }
 
-scl_full_new <- function (xy, dmat, ncl, linkage, shortest, nnbs) {
+scl_full_new <- function (xy, dmat, ncl, linkage, shortest, nnbs,
+                          boundary) {
 
     ids <- rownames (xy)
     xy <- scl_tbl (xy)
@@ -54,7 +56,9 @@ scl_full_new <- function (xy, dmat, ncl, linkage, shortest, nnbs) {
     # The spatial neighbour graph and initial clusters are always built from
     # the nearest spatial neighbours. `shortest` only determines whether
     # the distances in `dmat` are minimised or maximised when merging.
-    if (nnbs <= 0) {
+    if (!is.null (boundary)) {
+        edges <- scl_edges_cdt (xy, boundary)
+    } else if (nnbs <= 0) {
         edges <- scl_edges_tri (xy)
     } else {
         edges <- scl_edges_nn (xy, nnbs = nnbs)

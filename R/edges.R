@@ -39,6 +39,176 @@ scl_edges_tri <- function (xy) {
     append_dist_to_edges (edges, dxy, shortest = TRUE)
 }
 
+#' scl_edges_cdt
+#'
+#' Generate triangulated nearest-neighbour edges between a set of input points,
+#' constrained by a boundary. The points and the boundary rings are
+#' triangulated together with a constrained Delaunay triangulation (via the
+#' 'cdtr' package), triangles outside the boundary (and inside any holes) are
+#' removed, and only edges joining two input points are retained. This avoids
+#' the edges an unconstrained triangulation generates across concavities or
+#' gaps in the boundary of the study region.
+#'
+#' Boundary vertices may take some edges which would otherwise join input
+#' points. If the resulting graph is not connected, the edges of a minimal
+#' spanning tree of spatial distances are added, as for \link{scl_edges_nn}.
+#'
+#' @param boundary Boundary rings, as accepted by \link{scl_redcap}.
+#' @inheritParams scl_redcap
+#' @return A `tibble` of `from` and `to` vertex indices in both directions,
+#' along with corresponding spatial distances calculated from 'xy', sorted in
+#' ascending order of distance.
+#' @noRd
+scl_edges_cdt <- function (xy, boundary) {
+
+    if (!requireNamespace ("cdtr", quietly = TRUE)) {
+        stop (
+            "The 'cdtr' package is required for 'boundary'; ",
+            "please install it with 'install.packages (\"cdtr\")'",
+            call. = FALSE
+        )
+    }
+
+    xy <- scl_tbl (xy)
+    n <- nrow (xy)
+    rings <- boundary_rings (boundary)
+
+    bx <- unlist (lapply (rings, function (r) r [, 1]))
+    by <- unlist (lapply (rings, function (r) r [, 2]))
+    ring_len <- vapply (rings, nrow, integer (1L))
+    ring_start <- n + cumsum (c (0L, ring_len [-length (ring_len)]))
+    s0 <- unlist (lapply (seq_along (rings), function (i) {
+        ring_start [i] + seq_len (ring_len [i])
+    }))
+    s1 <- unlist (lapply (seq_along (rings), function (i) {
+        ring_start [i] + c (seq_len (ring_len [i]) [-1], 1L)
+    }))
+
+    # "holes" removes triangles outside the outer rings and inside any holes:
+    tri <- cdtr::cdt_triangulate (
+        c (xy$x, bx), c (xy$y, by),
+        s0 = s0, s1 = s1,
+        erase = "holes"
+    )
+
+    # Map triangulation vertices back to input points; boundary vertices (and
+    # any Steiner vertices) map to NA.
+    pt_index <- match (seq_len (nrow (tri$P)), tri$input_map [seq_len (n)])
+    e <- cdtr::cdt_edges (tri)
+    e <- cbind (pt_index [e [, 1]], pt_index [e [, 2]])
+    e <- e [which (!is.na (e [, 1]) & !is.na (e [, 2])), , drop = FALSE]
+
+    if (!all (seq_len (n) %in% e)) {
+        stop (
+            "Some points have no neighbours within 'boundary'; ",
+            "all points must lie inside the boundary, and must not be ",
+            "duplicated",
+            call. = FALSE
+        )
+    }
+
+    edges <- tibble::tibble (
+        from = c (e [, 1], e [, 2]),
+        to = c (e [, 2], e [, 1])
+    )
+
+    dxy <- as.matrix (stats::dist (xy [, c ("x", "y")]))
+
+    if (n_components (edges, n) > 1L) {
+        edges_all <- tibble::tibble (
+            from = rep (seq_len (n), n),
+            to = rep (seq_len (n), each = n),
+            d = as.vector (dxy)
+        ) |>
+            dplyr::arrange (d, from, to) |>
+            dplyr::filter (from != to)
+        mst <- scl_spantree_ord1 (edges_all)
+        edges <- rbind (
+            edges,
+            mst [, c ("from", "to")],
+            tibble::tibble (from = mst$to, to = mst$from)
+        )
+        edges <- edges [which (!duplicated (edges)), ]
+    }
+
+    append_dist_to_edges (edges, dxy, shortest = TRUE)
+}
+
+#' boundary_rings
+#'
+#' Convert a boundary into a list of rings, each a two-column numeric matrix
+#' with no repeated closing vertex. Accepts a two-column matrix or data frame
+#' (one ring), a list of such rings, or (nested lists of) rings as in 'sf'
+#' POLYGON or MULTIPOLYGON geometries, 'sfc' geometry columns, or 'sf' data
+#' frames, without requiring the 'sf' package.
+#' @noRd
+boundary_rings <- function (boundary) {
+
+    if (inherits (boundary, "sf")) {
+        boundary <- boundary [[attr (boundary, "sf_column")]]
+    }
+
+    flatten <- function (b) {
+        if (is.data.frame (b) || is.matrix (b)) {
+            return (list (b))
+        }
+        if (is.list (b)) {
+            return (do.call (c, lapply (unclass (b), flatten)))
+        }
+        stop ("'boundary' must be a matrix, data frame, or list of these",
+            call. = FALSE
+        )
+    }
+    rings <- flatten (boundary)
+
+    rings <- lapply (rings, function (r) {
+        r <- as.matrix (r)
+        if (!is.numeric (r) || ncol (r) < 2L) {
+            stop ("'boundary' rings must have at least 2 numeric columns",
+                call. = FALSE
+            )
+        }
+        r <- unname (r [, 1:2, drop = FALSE])
+        r <- r [stats::complete.cases (r), , drop = FALSE]
+        nr <- nrow (r)
+        if (nr > 1L && all (r [1, ] == r [nr, ])) {
+            r <- r [-nr, , drop = FALSE]
+        }
+        if (nrow (r) < 3L) {
+            stop ("'boundary' rings must have at least 3 distinct vertices",
+                call. = FALSE
+            )
+        }
+        r
+    })
+
+    return (rings)
+}
+
+#' n_components
+#'
+#' Number of connected components of a graph defined by an edge table with
+#' integer 'from' and 'to' columns, over vertices 1..n.
+#' @noRd
+n_components <- function (edges, n) {
+
+    parent <- seq_len (n)
+    find_root <- function (i) {
+        while (parent [i] != i) {
+            i <- parent [i]
+        }
+        i
+    }
+    for (k in seq_len (nrow (edges))) {
+        a <- find_root (edges$from [k])
+        b <- find_root (edges$to [k])
+        if (a != b) {
+            parent [a] <- b
+        }
+    }
+    length (unique (vapply (seq_len (n), find_root, integer (1L))))
+}
+
 #' scl_edges_nn
 #'
 #' Generate distance-based nearest-neighbour edges between a set of input
