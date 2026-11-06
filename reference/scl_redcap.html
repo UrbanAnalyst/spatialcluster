@@ -66,6 +66,7 @@ Constrained Agglomerative clustering and Partitioning) routines.</p>
 <span>  linkage <span class="op">=</span> <span class="st">"single"</span>,</span>
 <span>  shortest <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  nnbs <span class="op">=</span> <span class="fl">6L</span>,</span>
+<span>  boundary <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  iterate_ncl <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  quiet <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -122,7 +123,17 @@ spatial distances.</p></dd>
 <dt id="arg-nnbs">nnbs<a class="anchor" aria-label="anchor" href="#arg-nnbs"></a></dt>
 <dd><p>Number of spatially nearest neighbours to be used in calculating
 clustering trees, irrespective of <code>shortest</code>. Triangulation will be
-used if <code>nnbs &lt;= 0</code>.</p></dd>
+used if <code>nnbs &lt;= 0</code>. Ignored if <code>boundary</code> is given.</p></dd>
+
+
+<dt id="arg-boundary">boundary<a class="anchor" aria-label="anchor" href="#arg-boundary"></a></dt>
+<dd><p>Optional boundary of the study region. If given, spatial
+neighbours are taken from a constrained Delaunay triangulation of the points
+within this boundary (requires the 'cdtr' package), so that no neighbour
+edges cross outside it, for example across concavities in the region. May be
+a two-column matrix or data frame of the vertices of a single ring, a list of
+such rings (holes are recognised by nesting), or an 'sf' polygon or
+multipolygon object. All points in <code>xy</code> must lie inside the boundary.</p></dd>
 
 
 <dt id="arg-iterate-ncl">iterate_ncl<a class="anchor" aria-label="anchor" href="#arg-iterate-ncl"></a></dt>
