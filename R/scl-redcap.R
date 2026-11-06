@@ -37,7 +37,14 @@
 #' spatial distances.
 #' @param nnbs Number of spatially nearest neighbours to be used in calculating
 #' clustering trees, irrespective of \code{shortest}. Triangulation will be
-#' used if \code{nnbs <= 0}.
+#' used if \code{nnbs <= 0}. Ignored if \code{boundary} is given.
+#' @param boundary Optional boundary of the study region. If given, spatial
+#' neighbours are taken from a constrained Delaunay triangulation of the points
+#' within this boundary (requires the 'cdtr' package), so that no neighbour
+#' edges cross outside it, for example across concavities in the region. May be
+#' a two-column matrix or data frame of the vertices of a single ring, a list of
+#' such rings (holes are recognised by nesting), or an 'sf' polygon or
+#' multipolygon object. All points in \code{xy} must lie inside the boundary.
 #' @param iterate_ncl Actual numbers of clusters found may be less than the
 #' specified value of `ncl`, because clusters formed from < 3 edges are removed.
 #' If `iterate_ncl = FALSE` (the default), the value is returned with whatever
@@ -90,6 +97,7 @@ scl_redcap <- function (xy,
                         linkage = "single",
                         shortest = TRUE,
                         nnbs = 6L,
+                        boundary = NULL,
                         iterate_ncl = FALSE,
                         quiet = FALSE) {
 
@@ -115,13 +123,13 @@ scl_redcap <- function (xy,
 
         scl_redcap_new (
             xy, dmat, ncl, full_order, linkage, shortest, nnbs,
-            iterate_ncl, quiet
+            boundary, iterate_ncl, quiet
         )
     }
 }
 
 scl_redcap_new <- function (xy, dmat, ncl, full_order, linkage, shortest, nnbs,
-                            iterate_ncl, quiet) {
+                            boundary, iterate_ncl, quiet) {
 
     ids <- rownames (xy)
     xy <- scl_tbl (xy)
@@ -131,7 +139,9 @@ scl_redcap_new <- function (xy, dmat, ncl, full_order, linkage, shortest, nnbs,
     # from the nearest spatial neighbours. `shortest` only determines
     # whether lower or higher values of `dmat` are preferentially merged
     # when cutting the tree.
-    if (nnbs <= 0) {
+    if (!is.null (boundary)) {
+        edges_nn <- scl_edges_cdt (xy, boundary)
+    } else if (nnbs <= 0) {
         edges_nn <- scl_edges_tri (xy)
     } else {
         edges_nn <- scl_edges_nn (xy, nnbs = nnbs)

@@ -1,5 +1,9 @@
 # spatialcluster 0.2.0.00X (current dev version)
 
+- New `boundary` parameter for `scl_redcap()` and `scl_full()`: spatial
+  neighbours are taken from a constrained Delaunay triangulation within the
+  boundary of the study region (via the 'cdtr' package), so that no neighbour
+  edges cross outside it (#5).
 - Allow 'dmat' to be long-form as well as square (#8)
 - Finish main vignette
 - Fix `shortest` parameter behaviour for `scl_full()` and `scl_redcap()`:

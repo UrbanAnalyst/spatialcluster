@@ -2,7 +2,8 @@ Package: spatialcluster
 Title: Spatially Contiguous Clustering with the 'Redcap' Algorithm
 Version: 0.2.1.007
 Authors@R: 
-    person("Mark", "Padgham", , "mark.padgham@email.com", role = c("aut", "cre"))
+    c(person("Mark", "Padgham", , "mark.padgham@email.com", role = c("aut", "cre")), 
+      person("Michael", "Sumner", role = c("ctb"), comment = c(ORCID = "0000-0002-2471-7511")))
 Description: Groups spatial data into clusters of similar observations, while
     requiring that each cluster forms a single spatially contiguous region.
     Contiguity is enforced by first building a spanning tree from the spatial
@@ -31,6 +32,7 @@ Imports:
     Rcpp (>= 0.12.6),
     tibble
 Suggests:
+    cdtr,
     dbscan,
     knitr,
     rmarkdown,
