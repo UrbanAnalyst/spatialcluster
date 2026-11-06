@@ -1,9 +1,11 @@
+.ccls-cache/
 ^.*\.Rproj$
 ^.*\.pdf$
 ^README-.*\.png$
 ^README-src\.Rmd$
 ^README\.html$
 ^\.Rproj\.user$
+^\.claude$
 ^\.git$
 ^\.github$
 ^\.gitignore$
@@ -12,6 +14,7 @@
 ^_pkgdown.yml$
 ^aaa*
 ^codemeta\.json$
+^cran-comments.md$
 ^inst/WORDLIST$
 ^makefile$
 ^vignettes/makefile$
